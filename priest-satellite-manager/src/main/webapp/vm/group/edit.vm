@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("common/head.vm")
+    <style type="text/css">
+        .checkboxBtn {
+            vertical-align: middle;
+        }
+    </style>
+    <link rel="stylesheet" href="/js/zTree/zTreeStyle.css" type="text/css">
+    <script type="text/javascript" src="/js/zTree/jquery.ztree.core-3.5.min.js"></script>
+    <script type="text/javascript" src="/js/zTree/jquery.ztree.excheck-3.5.min.js"></script>
+
+</head>
+
+<body>
+<!--header-->
+    #parse("common/nav.vm")
+
+<div class="container-fluid">
+    <!--documents-->
+    <div id="content" class="row row-offcanvas row-offcanvas-left">
+        <!--left-->
+        #parse("common/left.vm")
+
+        <div id="right" class="col-xs-12 col-sm-9 content">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="form-group">
+                        <div class="col-md-11">
+                            <h3 class="panel-title"><a href="javascript:void(0);" class="toggle-sidebar"><span class="fa fa-angle-double-left" data-toggle="offcanvas" title="Maximize Panel"></span></a>
+                                监控端 - 编辑/新增</h3>
+                        </div>
+                        <div class="col-md-1">
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-body">
+
+                    <div id="pageCanvasInt" class="canvasInt">
+
+
+
+                        <form id="groupForm" name="groupForm" action="/group/save.vm" method="post">
+                            <input type="hidden" name="id" value="$!{group.id}"/>
+                            <input type="hidden" name="orderId" value="$!{group.orderId}"/>
+
+                            <table class="table table-bordered table-striped formLayout m0">
+                                <tr>
+                                    <td>组名称：</td>
+                                    <td>
+                                        <input type="text" name="name" placeholder="" class="form-control" style="width: 200px;"
+                                               value="$!{group.name}" />
+                                    </td>
+                                </tr>
+
+                                <tr><th>用户菜单</th><td>
+                                    <!-- <div>
+                                        &nbsp;<a href="#" onclick="addUser_zTree.expandAll(true);">全部展开</a>
+                                        &nbsp;<a href="#" onclick="addUser_zTree.expandAll(false);">全部折叠</a>
+                                    </div> -->
+                                    <div id="tabs_menuType" class="form_checkboxes_div">
+                                        <ul>
+
+                                            #foreach(${menuType} in $!{menuTypeList})
+                                                <li><a href="#tabs_menuTree_${menuType.id}">${menuType.name}&nbsp;&nbsp;</a></li>
+                                            #end
+                                        </ul>
+
+
+                                        #foreach(${menuTypeTree} in $!{menuTypeTreeJson})
+                                            <script>
+
+                                                var menuTree_zNodes_${menuTypeTree.id} = ${menuTypeTree.json};
+                                                $(document).ready(function(){
+                                                    $.fn.zTree.init($("#menuTree_${menuTypeTree.id}"), zTree_setting, menuTree_zNodes_${menuTypeTree.id});
+
+                                                });
+                                            </script>
+                                            <div id="tabs_menuTree_${menuTypeTree.id}" class="left">
+                                                <ul id="menuTree_${menuTypeTree.id}" class="ztree"></ul>
+                                            </div>
+                                        #end
+
+                                    </div>
+
+                    </div>
+                    </td></tr>
+                    </table>
+                    </form>
+
+                    <p>
+                    <td colspan="2">
+                        <a href="/group/list.vm" class="btn btn-primary" role="button">返回</a>
+                        <button onclick="document.getElementById('groupForm').submit()" class="btn btn-success">保存</button>
+                    </td>
+                    </p>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+<script type="text/javascript">
+    <!--
+    var zTree_setting = {
+        check: {
+            enable: true
+        },
+        data: {
+            simpleData: {
+                enable: false
+            }
+        },
+        view: {//增加自定义Dom函数。
+            addDiyDom: addDiyDom
+        },
+        callback: {//增加自定义事件。当checkbox选中执行。
+            onCheck: onCheck
+        }
+
+    };
+
+    //参考 http://www.ztree.me/hunter/ztree/checkboxDemo.html
+    // 新api 使用：http://www.ztree.me/v3/demo/cn/super/diydom.html
+    var IDMark_A = "_a";
+    //添加自己的DIY Dom树。展示checkbox
+    function addDiyDom(treeId, treeNode) {
+        var aObj = $("#" + treeNode.tId + IDMark_A);
+        //console.log(treeNode.tId)
+        if (treeNode.level >= 1) {
+            //alert(treeNode.checked);display: none;
+            var editStr = "<input type='checkbox' name='menuIds' style='display: none;' id='checkbox_"
+                    + treeNode.tId + "' value='"+ treeNode.id +"' "
+            //如果被选中
+            if(treeNode.checked){
+                editStr += " checked='checked'";
+            }
+            editStr += " onfocus='this.blur();'></input>";
+            aObj.before(editStr);
+        }
+    }
+    //当选中checkbox。
+    function onCheck(e, treeId, treeNode) {
+        //console.log(treeNode.checked);
+        //console.log(checkbox_hidden);
+        var zTree = $.fn.zTree.getZTreeObj(treeId),
+                nodes = zTree.getCheckedNodes(true);
+        for (var i = 0, l = nodes.length; i< l; i++) {
+            //nodes[i].checkedOld = nodes[i].checked;
+            //console.log(nodes[i].tId+","+nodes[i].checked);
+            var checkbox_hidden = $("#checkbox_" + nodes[i].tId);
+            //console.log(checkbox_hidden)
+            checkbox_hidden.attr("checked","checked");//修改checked
+        }
+        nodes = zTree.getCheckedNodes(false);
+        for (var i = 0, l = nodes.length; i< l; i++) {
+            //nodes[i].checkedOld = nodes[i].checked;
+            //console.log(nodes[i].tId+","+nodes[i].checked);
+            var checkbox_hidden = $("#checkbox_" + nodes[i].tId);
+            //console.log(checkbox_hidden)
+            checkbox_hidden.removeAttr("checked");//修改checked
+        }
+    }
+
+    $(document).ready(function(){
+        $("#tabs_menuType").tabs();
+    });
+    //-->
+</script>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("common/head.vm")
+</head>
+<body>
+<!--header-->
+    #parse("common/nav.vm")
+
+<div class="container-fluid">
+    <!--documents-->
+    <div id="content" class="row row-offcanvas row-offcanvas-left">
+        <!--left-->
+        #parse("common/left.vm")
+
+        <div id="right" class="col-xs-12 col-sm-9 content">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-md-11 col-sm-11">
+                            <h3 class="panel-title"><a href="javascript:void(0);" class="toggle-sidebar"><span class="fa fa-angle-double-left" data-toggle="offcanvas" title="Maximize Panel"></span></a>
+                                监控任务</h3>
+                        </div>
+                        <div class="col-md-1 col-sm-1">
+                            <a href="new_edit.vm"><i class="glyphicon glyphicon-plus"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="col-md-12">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+
+                                <th width="50">任务名称</th>
+                                <th width="50">脚本名称</th>
+                                <th width="50">运行周期</th>
+                                <th width="50">状态</th>
+                                <th width="100" align="right">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                #foreach(${item} in $!{list})
+                                <tr class="footable-even" style="display: table-row;">
+
+                                    <td class="project-status">
+                                        $!{item.name}
+                                    </td>
+                                    <td class="project-status">
+                                        $!{item.scriptName}
+                                    </td>
+                                    <td class="project-status">
+                                        #if($!{item.sleepTime} != 0)
+                                            $!{item.sleepTime}分钟执行一次
+                                        #else
+                                            执行一次
+                                        #end
+                                    </td>
+                                    <td class="project-title">
+                                        #if($!{item.runStatus} == 0)
+                                            停止
+                                        #elseif($!{item.runStatus} == 1)
+                                            运行
+                                        #end
+
+                                    </td>
+
+
+                                    <td class="project-status">
+
+                                        <a date-target="$!{item.id}" title="运行" id="btn_run" onclick="javascript:run($!{item.id})"  class="btn btn-info btn-xs"><i
+                                                class="glyphicon glyphicon-play"></i></a>
+
+                                        <a date-target="$!{item.id}" title="停止" id="btn_stop" onclick="javascript:stop($!{item.id})"  class="btn btn-warning  btn-xs"><i
+                                                class="glyphicon glyphicon-stop"></i></a>
+                                        <a date-target="$!{item.id}" title="停止" id="btn_modify" href="new_edit.vm?id=$!{item.id}" class="btn btn-info btn-xs ">
+                                            <i class="fa fa-pencil"></i></a>
+                                        <a date-target="$!{item.id}" title="删除" id="btn_delete" onclick="javascript:deletetimer($!{item.id})"  class="btn btn-danger btn-xs"><i
+                                                class="fa fa-times"></i></a>
+
+                                    </td>
+                                </tr>
+
+
+                                #end
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+    </div><!-- content -->
+    <div id="footer"></div>
+</div>
+</div>
+<script src="$!{ct}/js/timer/timer.js"></script>
+
+</body>
+</html>

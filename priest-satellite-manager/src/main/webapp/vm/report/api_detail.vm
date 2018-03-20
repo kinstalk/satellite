@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Public Website Health Status for WithU, Inc. - Public</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="/css/bootstrap.min.css?v=3.3.5" rel="stylesheet">
+    <link href="/css/style.min.css?v=4.0.0" rel="stylesheet">
+    <base target="_blank">
+</head>
+<body class="gray-bg">
+
+<div id="container"><!--start container-->
+    <div id="section_curr_status"><!--start section current status-->
+        <div class="date floatright" id="psp_last_update">
+            <a href="#"><img src="/img/back_gray.png" width="30" height="30"></a>
+        </div>
+        <h3><b>Availablity over the last 24 hours.</b></h3>
+    </div><!--end section current status-->
+    <div class="echarts" id="echarts-line-chart"></div>
+    <div id="page_loader" class="nodisplay" style="display: none;">Loading data...</div>
+</div>
+
+<script src="/js/jquery.min.js?v=2.1.4"></script>
+<script src="/js/echarts-all.js"></script>
+<script>
+    $(function () {
+        var e = echarts.init(document.getElementById("echarts-line-chart")),
+                a = {
+                    title: {
+                        text: ""
+                    },
+                    tooltip: {
+                        trigger: "axis"
+                    },
+                    legend: {
+                        data: ["max success rate", "average success rate"]
+                    },
+                    grid: {
+                        x: 40,
+                        x2: 40,
+                        y2: 24
+                    },
+                    calculable: !0,
+                    xAxis: [{
+                        type: "category",
+                        name: '时间',
+                        boundaryGap: !1,
+                        data: $!{timeList}
+                    }],
+                    yAxis: [
+                        {
+                            type: 'value',
+                            name: '成功率',
+                            axisLabel: {
+                                show: true,
+                                interval: 'auto',
+                                formatter: '{value} %'
+                            }
+                        }
+                    ],
+                    series: [{
+                        name: "max success rate",
+                        type: "line",
+                        data: $!{dataList},
+                        markPoint: {
+                            data: [{
+                                type: "max",
+                                name: "最大值"
+                            }, {
+                                type: "min",
+                                name: "最小值"
+                            }]
+                        },
+                        markLine: {
+                            data: [{
+                                type: "average",
+                                name: "平均值"
+                            }]
+                        }
+                    }, {
+                        name: "average success rate",
+                        type: "line",
+                        data: $!{dataList},
+                        markLine: {
+                            data: [{
+                                type: "average",
+                                name: "平均值"
+                            }]
+                        }
+                    }]
+                };
+        e.setOption(a), $(window).resize(e.resize);
+    });
+</script>
+
+</body>
+
+</html>

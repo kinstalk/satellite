@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+</head>
+<body>
+
+<DIV ID="SENSITIVE_LIST_API_DIV">
+
+</DIV>
+
+<DIV ID="SENSITIVE_LIST_MODULE_DIV">
+
+</DIV>
+
+</body>
+<script src="/js/jquery-1.10.1.min.js"></script>
+<script src="/js/echarts/echarts.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        function effect(data) {
+            require.config({
+                paths: {
+                    echarts: 'js/echarts/echarts.js'
+
+                }
+            });
+            require(
+                    function (ec, theme) {
+                        function randomData() {
+
+                            value = Math.floor(Math.random() * 10 + 1);
+                            return value;
+                        }
+
+                        var date = ['一', '二', '三', '四', '五', '六', '七', '八', '九'];
+                        option = {
+                            title: {
+                                text: '对数轴示例',
+                                left: 'center'
+                            },
+                            tooltip: {
+                                trigger: 'item',
+                                formatter: '{a} <br/>{b} : {c}'
+                            },
+                            legend: {
+                                left: 'left',
+                                data: ['2的指数', '3的指数']
+                            },
+                            xAxis: {},
+                            grid: {
+                                left: '3%',
+                                right: '4%',
+                                bottom: '3%',
+                                containLabel: true
+                            },
+                            yAxis: {
+                                type: 'log',
+                                name: 'y'
+                            },
+                            series: []
+                        };
+                        var data1 = [1, 3, 9, 27, 81, 247, 741, 2223, 6669];
+                        var data2 = [1, 2, 4, 8, 16, 32, 64, 128, 256];
+                        var data3 = [1 / 2, 1 / 4, 1 / 8, 1 / 16, 1 / 32, 1 / 64, 1 / 128, 1 / 256, 1 / 512];
+
+
+                        app.timeTicket = setInterval(function () {
+
+                            data1.shift();
+                            data2.shift();
+                            data3.shift();
+                            date.shift();
+                            data1.push(randomData());
+                            data2.push(randomData());
+                            data3.push(randomData());
+                            date.push(randomData());
+
+
+                            myChart.setOption({
+                                xAxis: {
+                                    type: 'category',
+                                    name: 'x',
+                                    splitLine: {show: false},
+                                    data: date
+                                },
+                                series: [{
+                                    name: '3的指数',
+                                    type: 'line',
+                                    data: data1
+                                },
+                                    {
+                                        name: '2的指数',
+                                        type: 'line',
+                                        data: data2
+                                    },
+                                    {
+                                        name: '1/2的指数',
+                                        type: 'line',
+                                        data: data3
+                                    }]
+                            });
+                        }, 100000);
+
+                        var myChart = ec.init(document.getElementById('SENSITIVE_LIST_API_DIV'));
+                        myChart.setOption(option);
+
+
+                    });
+        }
+    });
+
+
+</script>
+
+
+
+
+
+
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <title>Public Website Health Status for Twitter, Inc. - Public</title>
+
+    <link type="text/css" rel="stylesheet" href="/css/twitter.css"
+          media="all">
+    <style type="text/css">
+        *{margin: 0px; padding: 0px;}
+        body{ font: 12px "Helvetica Neue", Arial, sans-serif; color: #333; -webkit-font-smoothing: antialiased;}
+        }
+    </style>
+
+</head>
+<body>
+
+<div class="Page Page--canopy is-narrow Page--basicStyles  Page--dev ">
+    <div class="Navigation Navigation--global is-loaded">
+        <div class="Navigation-inner">
+            <ul class="Navigation-inner-list Navigation-inner-list--breadcrumb">
+                <li class="NavigationItem NavigationItem--main NavigationItem--breadcrumb" style="width:40px;"><a
+                        href="#"></a></li>
+                <li class="NavigationItem NavigationItem--main NavigationItem--breadcrumb NavigationItem--withChildren"
+                    data-is-clickable="false"><a class="NavigationItem-link" href="#">Developers</a>
+
+                </li>
+                <li class="NavigationItem NavigationItem--main NavigationItem--breadcrumb NavigationItem--withChildren"
+                    data-is-clickable="false"><a class="NavigationItem-link" href="module_list">Module Status</a>
+
+                </li>
+                <li class="NavigationItem NavigationItem--main NavigationItem--breadcrumb"><a
+                        class="NavigationItem-link" >Overview</a>
+                </li>
+            </ul>
+            <ul class="Navigation-inner-list Navigation-inner-list--side Navigation-inner-list--user">
+                <li class="NavigationItem"><a class="NavigationItem-link" href="#"></a>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+    <div class=" Hero is-narrow Hero--dev">
+        <div class="Hero-wrap"></div>
+    </div>
+</div>
+<div id="container">
+    <div style="margin-top: 27px;"></div>
+    <div id="section_curr_status">
+        <h2>Current Performance and Availability Status</h2>
+        <table width="100%" border="0" cellpadding="0" cellspacing="0" class="psp-table" id="table_hist">
+            <tbody>
+
+            <tr>
+                <td width="23%" class="tablehead vertline" align="center">Service</td>
+##                <td width="23%" class="tablehead vertline" align="center">AgentArea</td>
+                #foreach(${item} in $!{date})
+                    <td width="11%" align="center" valign="middle" class="tablehead" id="hist_date_0"
+                        align="center">$!{item}</td>
+                #end
+            </tr>
+                #if(${list})
+                    #foreach(${item} in $!{list})
+                    <tr #if($foreach.count%2==0) class="oddrow" #end>
+                        <td class="vertline">
+
+
+                            <a href="/report/api_detail?apiId=$!{item.apiId}"
+                                                               title="View details"
+                                                               id="$!{item.moduleId}">
+                           #if($!{item.apiUrl.length()}>30)
+                               $!{item.apiUrl.substring(0,30)}...
+                           #else
+                               $!{item.apiUrl}
+                           #end
+                           </a></td>
+##                       <td class="vertline" align="center">
+##                           $!{item.agentArea}
+##                        </td>
+                        #foreach(${d} in $!{item.statusList})
+                            #if($d == -1)
+                                <td align="center" id="hist_cell_127245_0">
+                                    <span class="legend-status-icon-container legend-status-icon-notes">
+                                </td>
+                            #elseif($d == 1)
+                                <td align="center" valign="middle" id="hist_cell_127245_0">
+                                    <span class="legend-status-icon-container legend-status-icon-ok">
+                                </td>
+                            #elseif($d == 0)
+                                <td align="center" valign="middle" id="hist_cell_127245_0">
+                                    <span class="legend-status-icon-container legend-status-icon-error">
+                                </td>
+                            #end
+
+                        #end
+                    </tr>
+                    #end
+                #else
+                <tr>
+                    <td align="center" colspan="8" style="text-align: center">无数据</td>
+                </tr>
+                #end
+
+
+            </tbody>
+        </table>
+    </div><!--end section history-->
+    <div id="legend"><!--start legend-->
+        <center>
+            <span class="legend-status-icon-container legend-status-icon-ok"> Service is operating normally</span>
+            <span class="legend-status-icon-container legend-status-icon-warn"> Performance issues</span>
+            <span class="legend-status-icon-container legend-status-icon-error"> Service disruption</span>
+            <span class="legend-status-icon-container legend-status-icon-notes"> Informational message </span>
+        </center>
+    </div><!--end legend-->
+
+    <div id="page_loader" class="nodisplay" style="display: none;">Loading data...</div>
+</div><!--end container-->
+
+
+</body>
+</html>

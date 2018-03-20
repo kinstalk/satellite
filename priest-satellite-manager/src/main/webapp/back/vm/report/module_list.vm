@@ -1,0 +1,103 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>API Status | WithU Developers</title>
+    <link type="text/css" rel="stylesheet" href="/css/twitter.css"
+          media="all">
+    <style type="text/css">
+        *{margin: 0px; padding: 0px;}
+        body{ font: 12px "Helvetica Neue", Arial, sans-serif; color: #333; -webkit-font-smoothing: antialiased;}
+    </style>
+</head>
+<body>
+<div class="Page Page--canopy is-narrow Page--basicStyles  Page--dev ">
+    <div class="Navigation Navigation--global is-loaded">
+        <div class="Navigation-inner">
+            <ul class="Navigation-inner-list Navigation-inner-list--breadcrumb">
+                <li class="NavigationItem NavigationItem--main NavigationItem--breadcrumb" style="width:40px;"><a
+                        href="#"></a></li>
+                <li class="NavigationItem NavigationItem--main NavigationItem--breadcrumb NavigationItem--withChildren"
+                    data-is-clickable="false"><a class="NavigationItem-link" href="#">Developers</a>
+
+                </li>
+                <li class="NavigationItem NavigationItem--main NavigationItem--breadcrumb NavigationItem--withChildren"
+                    data-is-clickable="false"><a class="NavigationItem-link" href="module_list">Module Status</a>
+
+                </li>
+                <li class="NavigationItem NavigationItem--main NavigationItem--breadcrumb"><a
+                        class="NavigationItem-link" >Overview</a>
+                </li>
+            </ul>
+            <ul class="Navigation-inner-list Navigation-inner-list--side Navigation-inner-list--user">
+                <li class="NavigationItem"><a class="NavigationItem-link" href="#"></a>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+    <div class=" Hero is-narrow Hero--dev">
+        <div class="Hero-wrap"></div>
+    </div>
+</div>
+<div id="container">
+    <div style="margin-top: 27px;"></div>
+    <div id="section_curr_status">
+##        <div class="date floatright" id="psp_last_update">Jun 2, 2016 19:00 UTC-7</div>
+        <h2>Current Performance and Availability Status</h2>
+        <table width="100%" border="0" cellpadding="0" cellspacing="0" class="psp-table" id="table_curr_status">
+
+            <tbody>
+            <tr>
+                <td width="28%" class="tablehead" colspan="2">Service / Website</td>
+                <td width="34%" class="tablehead">Performance and Availability Status</td>
+                <td width="23%" class="tablehead">Current AVG</td>
+                <td width="15%" class="tablehead">Uptime Last 24h</td>
+            </tr>
+                #if(${list})
+                    #foreach(${item} in $!{list})
+                    <tr #if($foreach.count%2==0) class="oddrow" #end>
+                        <td width="3%" height="30px">
+                            <div class="status-icon-container #if($!{item.status} == 1) status-bg-green #else status-bg-red #end"></div>
+                        </td>
+                        <td>
+                            <a href="/report/api_list?moduleId=$!{item.moduleId}&appId=$!{item.appId}" id="$!{item.moduleId}">$!{item.moduleName}</a>
+                        </td>
+                        <td>
+                            #if($!{item.status} == 1)
+                                Service is operating normally
+                            #else
+                                Service disruption
+                            #end
+                        </td>
+                        <td><span>$!{item.costTime}&nbsp;ms</span></td>
+                        <td>$!{item.sucRate}</td>
+                    </tr>
+                    #end
+                #else
+                <tr>
+                    <td height="30px" align="center" colspan="4">无数据</td>
+                </tr>
+                #end
+
+            </tbody>
+        </table>
+    </div>
+
+    <div id="legend">
+        <center>
+            <span class="legend-status-icon-container legend-status-icon-ok"> Service is operating normally</span>
+            <span class="legend-status-icon-container legend-status-icon-warn"> Performance issues</span>
+            <span class="legend-status-icon-container legend-status-icon-error"> Service disruption</span>
+            <span class="legend-status-icon-container legend-status-icon-notes"> Informational message </span>
+        </center>
+    </div>
+    <div class="right" id="barter">
+        <span class="floatleft">Health Status for WithU API</span> Powered by the <a
+
+            href="http://www.withugroup.com"
+            target="_blank">WithU </a>
+    </div>
+    <div id="page_loader" class="nodisplay">Loading data...</div>
+</div>
+
+</body>
+</html>

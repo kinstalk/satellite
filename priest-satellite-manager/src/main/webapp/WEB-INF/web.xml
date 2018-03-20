@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.4"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee   http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+    <!--<welcome-file-list>-->
+        <!--<welcome-file>index.vm</welcome-file>-->
+    <!--</welcome-file-list>-->
+    <!-- context 参数配置 -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:spring-config.xml</param-value>
+    </context-param>
+    <!-- context loader -->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    <listener>
+        <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+    </listener>
+
+    <!-- dispatcher -->
+    <servlet>
+        <servlet-name>spring mvc</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:spring-mvc.xml</param-value>
+        </init-param>
+    </servlet>
+
+
+    <servlet-mapping>
+        <servlet-name>spring mvc</servlet-name>
+        <url-pattern>/*</url-pattern>
+    </servlet-mapping>
+
+    <filter>
+        <filter-name>encodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>utf-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>encodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- 权限过滤器 -->
+    <filter>
+        <filter-name>AdminLoginFilter</filter-name>
+        <filter-class>com.kinstalk.satellite.filter.AdminLoginFilter</filter-class>
+        <init-param>
+            <!-- url白名单，不进行过滤的白名单url。-->
+            <param-name>whiteListUrl</param-name>
+            <param-value>/css,/js,/passport,/fonts,/inner,/admin/zentao/save</param-value>
+        </init-param>
+        <init-param>
+            <param-name>menuTypeId</param-name><!-- 系统类型-->
+            <param-value>1</param-value>
+        </init-param>
+        <!--<init-param>-->
+            <!--&lt;!&ndash; url白名单，不进行过滤的白名单url。&ndash;&gt;-->
+            <!--<param-name>passportUrl</param-name>-->
+            <!--&lt;!&ndash;<param-value>http://admin.devops.kinstalk.com/passport/index?returnUrl=http://admin.devops.kinstalk.com</param-value>&ndash;&gt;-->
+            <!--&lt;!&ndash;线上用&ndash;&gt;-->
+            <!--<param-value>/passport/index?returnUrl=http://monitor.shuzijiayuan.com</param-value>-->
+
+            <!--&lt;!&ndash;<param-value>http://127.0.0.1:9088/passport/index?returnUrl=http://127.0.0.1:9088</param-value>&ndash;&gt;-->
+        <!--</init-param>-->
+        <!--<init-param>-->
+            <!--<param-name>passportUserMenuJson</param-name>&lt;!&ndash; 用户菜单json。&ndash;&gt;-->
+            <!--<param-value>http://monitor.shuzijiayuan.com/passport/userMenuJson</param-value>-->
+            <!--&lt;!&ndash; local&ndash;&gt;-->
+            <!--&lt;!&ndash;<param-value>http://127.0.0.1:9088/passport/userMenuJson</param-value>&ndash;&gt;-->
+        <!--</init-param>-->
+        <!--<init-param>-->
+            <!--<param-name>passportUserMenuHtml</param-name>&lt;!&ndash; 用户菜单html。&ndash;&gt;-->
+            <!--<param-value>http://monitor.shuzijiayuan.com/userMenuHtml</param-value>-->
+            <!--&lt;!&ndash; local&ndash;&gt;-->
+            <!--&lt;!&ndash;<param-value>http://127.0.0.1:9088/userMenuHtml</param-value>&ndash;&gt;-->
+        <!--</init-param>-->
+
+    </filter>
+    <filter-mapping>
+        <filter-name>AdminLoginFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
+
+
+
+</web-app>
+

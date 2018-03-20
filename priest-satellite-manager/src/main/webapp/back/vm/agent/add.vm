@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+
+<body class="gray-bg">
+
+          <div class="ibox-content" >
+              <form   method="post" id="runForm" class="form-horizontal" style="width: 650px;align-self: center;">
+
+
+                  <input class="form-control m-b" id="areaid" name="agentId" type="hidden" value="$!{Agent.agentId}">
+
+
+                  <div class="form-group">
+                      <label  class="col-sm-2 control-label">Agent地域:</label>
+                      <div class="col-md-10" style="width:360px">
+                          <input class="form-control m-b" id="area" name="agentArea" type="text" value="$!{Agent.agentArea}">
+                      </div>
+                  </div>
+
+                  <div class="form-group">
+                      <label  class="col-sm-2 control-label">AgentIP:</label>
+                      <div class="col-md-10" style="width:360px">
+                          <input class="form-control m-b" id="ip" name="agentIp" type="text" value="$!{Agent.agentIp}">
+
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <label  class="col-sm-2 control-label">AgentPort:</label>
+                      <div class="col-md-10" style="width:360px">
+                          <input class="form-control m-b" id="iport" name="agentPort" type="text" value="$!{Agent.agentPort}">
+
+                      </div>
+                  </div>
+
+
+              </form>
+              <div class="modal-footer">
+                  <button type="button" id="btn_add_close" class="btn btn-primary" data-dismiss="modal">关闭</button>
+                  <button type="submit" id="btn_run_add" onclick="btnadd()"  class="btn btn-primary">保存</button>
+              </div>
+
+    </div>
+
+<script type="text/javascript">
+
+    function btnadd() {
+        var area=$("#area").val();
+        var ip=$("#ip").val();
+        if(area==null||area==''){
+            swal("WARN", "请填写地域", "");
+
+            return;
+        }
+        if(ip==null||ip==''){
+            swal("WARN", "请填写ip", "");
+            return;
+        }
+
+        $.ajax({
+            url: '/agent/save',
+            data: $("#runForm").serialize(),
+            type: "POST",
+            success: function (data) {
+
+                $("#btn_add_close").click();
+                window.location.reload();
+            }
+        });
+    }
+</script>
+</body>
+</html>

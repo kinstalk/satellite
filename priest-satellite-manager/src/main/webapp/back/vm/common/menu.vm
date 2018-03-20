@@ -1,0 +1,29 @@
+##<div class="list-group">
+##    <a href="#" class="list-group-item active">
+##        菜单
+##    </a>
+##    <a href="/admin/blackWhiteListSetting/list/1/1" class="list-group-item">用户黑白名单管理</a>
+##    <a href="/admin/blackWhiteListSetting/list/2/1" class="list-group-item">IP黑白名单管理</a>
+##    <a href="/admin/frequencySetting/list/1" class="list-group-item">访问配额管理</a>
+##    <a href="/admin/phizKit/list" class="list-group-item">亲表情包管理</a>
+##    <a href="/admin/phiz/list" class="list-group-item">亲表情管理</a>
+##    <a href="/admin/sysAvatar/list" class="list-group-item">头像管理</a>
+##    <a href="/admin/emoticon/list" class="list-group-item">表情管理</a>
+##    <a href="/admin/emoticonKit/list/" class="list-group-item">表情包管理</a>
+##    <a href="/admin/smsOperator/list" class="list-group-item">短信运营商管理</a>
+##    <a href="/admin/adminUser/list" class="list-group-item">用户管理</a>
+##    <a href="/admin/keyValue/list" class="list-group-item">KeyValue管理</a>
+##    <a href="/admin/commonConfig/list" class="list-group-item">配置服务管理</a>
+##    <a href="/admin/locationPTR/list" class="list-group-item">PTR信息管理</a>
+##    <a href="/admin/knowledge/list" class="list-group-item">新闻&健康信息管理</a>
+##</div>
+
+##${requestContext.request.getAttribute("UserMenuHtml")}
+##【${requestContext.getModel().keySet()}】
+
+##UserName：${requestContext.getModel().get("UserName")}
+##UserMenuHtml：${requestContext.getModel().get("UserMenuHtml")}
+##UserMenuJsonCache：${requestContext.getModel().get("UserMenuJsonCache")}
+##UserMenuHtmlCache：${requestContext.getModel().get("UserMenuHtmlCache")}
+
+$!{UserMenuHtml}

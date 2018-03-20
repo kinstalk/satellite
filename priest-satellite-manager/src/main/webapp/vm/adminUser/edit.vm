@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("common/head.vm")
+</head>
+
+<body>
+<!--header-->
+    #parse("common/nav.vm")
+
+<div class="container-fluid">
+    <!--documents-->
+    <div id="content" class="row row-offcanvas row-offcanvas-left">
+        <!--left-->
+        #parse("common/left.vm")
+
+        <div id="right" class="col-xs-12 col-sm-9 content">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="form-group">
+                        <div class="col-md-11">
+                            <h3 class="panel-title"><a href="javascript:void(0);" class="toggle-sidebar"><span class="fa fa-angle-double-left" data-toggle="offcanvas" title="Maximize Panel"></span></a>
+                                监控端 - 编辑/新增</h3>
+                        </div>
+                        <div class="col-md-1">
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-body">
+                    <form id="adminUserForm" name="adminUserForm" action="/admin/save.vm" method="post">
+
+
+                        <table class="table table-bordered table-striped formLayout m0">
+
+
+                            <tr>
+                                <td>账号：</td>
+                                <td> <input type="text" name="id" readonly="readonly" value="$!{adminUser.id}"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>密码：</td>
+                                <td> <input type="text" name="password" value="$!{adminUser.password}"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>姓名：</td>
+                                <td> <input type="text" name="name" value="$!{adminUser.name}"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>组管理：</td>
+                                <td>
+                                    <ul style="list-style: none;">
+                                        #foreach(${group} in $!{groupList})
+                                        <li style="height: 35px;">
+                                            <input type="checkbox" name="groupIds" value="$!{group.id}"
+                                                #if($!{group.isChecked} == 1)
+                                                   checked="checked"
+                                                #end/>
+                                            $!{group.name}
+
+                                        ##                                    <a href="/admin/group/edit?id=$!{group.id}"
+                                        ##                                       class="btn btn-primary btn-xs" role="button">修改</a>
+                                        ##                                    </li>
+                                        #end
+                                    </ul>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+
+                    <p>
+                    <td colspan="2">
+                        <a href="/admin/list.vm" class="btn btn-primary" role="button">返回</a>
+                        <button onclick="document.getElementById('adminUserForm').submit()" class="btn btn-success">保存</button>
+                    </td>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+</html>

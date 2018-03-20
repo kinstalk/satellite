@@ -1,0 +1,29 @@
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+
+    <context:property-placeholder location="classpath:project.properties" ignore-unresolvable="true"
+                                  file-encoding="UTF-8"/>
+
+    <context:component-scan base-package="com.kinstalk.satellite.web">
+        <!--定义的扫描包配置，对rest的支持-->
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <!--对mvc的支持配置-->
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <constructor-arg name="defaultCharset" value="UTF-8"/>
+                <property name="writeAcceptCharset" value="false"/>
+            </bean>
+            <!--json与字符串的转换配置-->
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+            <!--<bean class="com.kinstalk.common.http.converter.json.QinMappingJackson2HttpMessageConverter"/>-->
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+</beans>

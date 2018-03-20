@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("common/head.vm")
+</head>
+<body>
+<!--header-->
+    #parse("common/nav.vm")
+
+<div class="container-fluid">
+    <!--documents-->
+    <div id="content" class="row row-offcanvas row-offcanvas-left">
+        #parse("common/left.vm")
+
+        <div id="right" class="col-xs-12 col-sm-9 content">
+
+            <div id="pageCanvasInt" class="canvasInt">
+
+
+                <div class="btn-group">
+                    <a href="/admin/edit?" class="btn btn-primary" role="button">增加</a>
+
+
+                </div>
+                <p>&nbsp;</p>
+
+               #* <div class="btn-group">
+                   <a href="/admin/adminUser/edit?" class="btn btn-primary" role="button">增加</a>
+                ###<a href="/admin/adminUser/login" class="btn btn-success" role="button">测试登陆</a>
+                  <button onclick="commonRefreshCacheConfirm();" class="btn btn-success" role="button">清除缓存</button>
+                </div>*#
+##                <p>&nbsp;</p>
+
+                <div class="panel panel-default">
+                    <table class="table table-hover table-striped table-condensed table-bordered">
+                        <tr>
+
+                            <th style="width: 60px;">id</th>
+                            <th style="width: 60px;">姓名</th>
+##                            <th style="width: 60px;">email</th>
+                            <th style="width: 100px;">操作</th>
+                        </tr>
+                        #foreach(${item} in $!{adminList})
+                            <tr>
+                                <td>$!{item.id}</td>
+                                <td>$!{item.name}</td>
+##                                <td>$!{item.email}</td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a href="/admin/edit.vm?id=$!{item.id}"
+                                           class="btn btn-primary btn-xs" role="button">修改</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        #end
+                    </table>
+                </div>
+
+
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+</body>
+</html>
+
+

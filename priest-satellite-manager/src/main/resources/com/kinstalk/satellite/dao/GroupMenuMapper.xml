@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kinstalk.satellite.dao.GroupMenuMapper">
+	
+
+	<resultMap id="groupMenuMap" type="com.kinstalk.satellite.domain.GroupMenu">
+        <id column="id" property="id"/>
+
+		<result column="menu_id" property="menuId"/>
+    </resultMap>
+
+    <resultMap id="menuMap" type="com.kinstalk.satellite.domain.Menu">
+        <id column="id" property="id"/>
+
+        <result column="name" property="name"/>
+        <result column="url" property="url"/>
+        <result column="type_id" property="typeId"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="level" property="level"/>
+        <result column="order_id" property="orderId"/>
+    </resultMap>
+
+    <!-- 所有查询列 -->
+    <sql id="QUERY_MENU_COLUMN_LIST">
+        <![CDATA[
+        DISTINCT `id` AS 'id',`name` AS 'name',`url` AS 'url',`type_id` AS 'typeId',`parent_id` AS 'parentId',`level` AS 'level',`order_id` AS 'orderId'
+		]]>
+    </sql>
+    <insert id="save" parameterType="com.kinstalk.satellite.domain.GroupMenu">
+        <selectKey resultType="Long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into <include refid="TABLE"/>
+        (
+        	`group_id`,`menu_id`
+        )
+        values
+        (
+
+        	#{groupId},
+        	#{menuId}
+        )
+    </insert>
+
+    <insert id="update" parameterType="com.kinstalk.satellite.domain.GroupMenu">
+        UPDATE <include refid="TABLE"/>
+        <include refid="UPDATE_COLUMN_SET"/>
+        <![CDATA[WHERE id = #{id}]]>
+    </insert>
+
+    <update id="delete" parameterType="com.kinstalk.satellite.domain.GroupMenu">
+        DELETE FROM
+        <include refid="TABLE"/>
+        <include refid="QUERY_WHERE_CLAUSE"/>
+    </update>
+
+    <!-- 查询 -->
+    <select id="selectList" parameterType="java.util.Map" resultMap="groupMenuMap">
+        SELECT
+            <include refid="QUERY_COLUMN_LIST"/>
+        FROM
+        <include refid="TABLE"/>
+        <include refid="QUERY_WHERE_CLAUSE"/>
+        <include refid="QUERY_ORDER_LIMIT_CONDITION"/>
+    </select>
+
+    <!-- 查询总数 -->
+    <select id="selectListCount" parameterType="java.util.Map" resultType="int">
+        SELECT COUNT(id) AS COUNT FROM
+        <include refid="TABLE"/>
+        <include refid="QUERY_WHERE_CLAUSE"/>
+        <include refid="QUERY_ORDER_LIMIT_CONDITION"/>
+    </select>
+
+    <!-- 查询ById -->
+    <select id="selectById" parameterType="java.lang.Long" resultMap="groupMenuMap">
+        SELECT
+        <include refid="QUERY_COLUMN_LIST"/>
+        FROM
+        <include refid="TABLE"/>
+        WHERE id = #{id}
+    </select>
+
+    <!-- 查询MenuById -->
+    <select id="selectMenuList" parameterType="java.lang.String" resultMap="menuMap">
+        SELECT
+        <include refid="QUERY_MENU_COLUMN_LIST"/>
+        FROM
+        <include refid="TABLE"/> as t,<include refid="TABLE_MENU"/> as tm
+        WHERE t.menu_id=tm.id and t.group_id  in
+        <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+	<!-- 所有查询列 -->
+	<sql id="QUERY_COLUMN_LIST">
+		<![CDATA[
+		`group_id` AS 'groupId',`menu_id` AS 'menuId'
+		]]>
+	</sql>
+
+	<!-- 表-->
+	<sql id="TABLE"><![CDATA[ admin_group_menu ]]></sql>
+    <sql id="TABLE_MENU"><![CDATA[ admin_menu ]]></sql>
+	
+	<!-- 全部条件(更多功能可以通过queryData扩展实现)  -->
+	<sql id="QUERY_WHERE_CLAUSE">
+		<where>
+			
+			<if test="groupId != null and groupId != ''"><![CDATA[AND `group_id` = #{groupId}]]></if>
+			<if test="menuId != null and menuId != ''"><![CDATA[AND `menu_id` = #{menuId}]]></if>
+		</where>
+	</sql>
+	
+	<!-- 智能排序与分页 -->
+	<sql id="QUERY_ORDER_LIMIT_CONDITION">
+		<if test="orderField != null and orderField != '' and orderFieldType != null and orderFieldType != ''"><![CDATA[ORDER BY ${orderField} ${orderFieldType}]]></if>
+		<if test="startIndex != null and startIndex &gt;= 0 and pageSize != null and pageSize &gt; 0"><![CDATA[LIMIT #{startIndex},#{pageSize}]]></if>
+	</sql>
+
+	<!-- 更新列字段,只要不为NULL则更新,除开主键列 -->
+	<sql id="UPDATE_COLUMN_SET">
+		<set>
+			
+			<if test="menuId != null"><![CDATA[ `menu_id` = #{menuId},]]></if>
+		</set>
+	</sql>
+	
+	
+</mapper>

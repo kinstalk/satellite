@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    #parse("common/meta.vm")
+
+</head>
+
+<body class="gray-bg">
+
+<div class="ibox-content" >
+
+
+    <form   method="post" id="configForm" class="form-horizontal" style="width: 650px;align-self: center;">
+
+
+        <input class="form-control m-b" id="areaid" name="id" type="hidden" value="$!{PoolConfig.id}">
+
+
+
+        <div class="form-group">
+            <label  class="col-sm-2 control-label">最小手机号:</label>
+            <div class="col-md-10" style="width:360px">
+                <input class="form-control m-b" id="minNumber" name="minNumber" type="text" value="$!{PoolConfig.minNumber}">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label  class="col-sm-2 control-label">最大手机号:</label>
+            <div class="col-md-10" style="width:360px">
+                <input class="form-control m-b" id="maxNumber" name="maxNumber" type="text" value="$!{PoolConfig.maxNumber}">
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label  class="col-sm-2 control-label">分组数:</label>
+            <div class="col-md-10" style="width:360px">
+                <input class="form-control m-b" id="groups" name="groups" type="text" value="$!{PoolConfig.groups}">
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label  class="col-sm-2 control-label">每组号码数:</label>
+            <div class="col-md-10" style="width:360px">
+                <input class="form-control m-b" id="size" name="size" type="text" value="$!{PoolConfig.size}">
+
+            </div>
+        </div>
+
+
+
+    </form>
+
+    <div class="form-group">
+        #if($!{PoolConfig.lastMaxNumber} !=0)
+        <label style="width:220px"  class="col-sm-2 control-label">已占用最大手机号:$!{PoolConfig.lastMaxNumber}</label>
+
+        <input class="form-control m-b" id="max" name="lastMaxNumber" type="hidden" value="$!{PoolConfig.lastMaxNumber}">
+        #end
+
+    </div>
+
+
+    <div class="modal-footer">
+
+        <button type="submit" id="btn_run_add" onclick="btnadd()"  class="btn btn-primary">保存</button>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+
+    function btnadd() {
+        var maxNumber=$("#maxNumber").val();
+        var minNumber=$("#minNumber").val();
+        var groups=$("#groups").val();
+        var size=$("#size").val();
+        var propmax=$("#max").val();
+
+        if(maxNumber==null||maxNumber==''){
+            swal("WARN", "请填写最大手机号", "");
+
+            return;
+        }
+        if(minNumber==null||minNumber==''){
+            swal("WARN", "请填写最小手机号", "");
+
+            return;
+        }
+        if(minNumber!=(parseInt(propmax)+1)&&propmax!=''&&propmax!=null){
+
+
+            swal("WARN", "最小手机号只能为: 当前已占用最大号+1", "");
+
+            return;
+
+        }
+
+        if(groups==null||groups==''){
+            swal("WARN", "请填写分组数", "");
+            return;
+        }
+        if(size==null||size==''){
+            swal("WARN", "每组号码数", "");
+            return;
+        }
+        if(maxNumber!=(parseInt(minNumber.toString())+(parseInt(groups.toString())*parseInt(size.toString())-1))){
+
+            swal("WARN", "最大手机号和分组配置不匹配", "");
+            return;
+        }
+
+        $.ajax({
+            url: '/pool/save',
+            data: $("#configForm").serialize(),
+            type: "POST",
+            success: function (data) {
+
+                if(data=='success'){
+
+                    swal("WARN", "保存成功", "");
+
+                    return;
+
+                }else{
+                    swal("WARN", "保存失败", "");
+                }
+            }
+        });
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("common/head.vm")
+    <script src="$!{ct}/js/script/script.js"></script>
+</head>
+<body>
+<!--header-->
+    #parse("common/nav.vm")
+
+<div class="container-fluid">
+    <!--documents-->
+    <div id="content" class="row row-offcanvas row-offcanvas-left">
+        <!--left-->
+        #parse("common/left.vm")
+
+        <div id="right" class="col-xs-12 col-sm-9 content">
+            <div class="panel panel-default" id="right-content">
+                <div class="panel-heading">
+                    <div class="form-group">
+                        <div class="col-md-11">
+                            <h3 class="panel-title"><a href="javascript:void(0);" class="toggle-sidebar"><span class="fa fa-angle-double-left" data-toggle="offcanvas" title="Maximize Panel"></span></a>
+                                监控脚本</h3>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="panel-title1">
+                            <a href="new_edit.vm"><i class="glyphicon glyphicon-plus"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="col-md-12">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>脚本名称</th>
+                                <th>备注</th>
+                                <th width="100">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                #foreach(${item} in $!{list})
+                                <tr >
+                                    <td>$!{item.id}</td>
+                                    <td> <a href="/script/download.vm?id=$!{item.id}"  role="button" >$!{item.name}</a></td>
+                                    <td>$!{item.remark}</td>
+                                    <td>
+                                        <input type="hidden" name="scriptid" id="scriptid" value="$!{item.id}"/>
+                                        <a href="/script/download.vm?id=$!{item.id}" class="btn btn-info btn-xs" target="_blank">
+                                            <i class="fa fa-download"></i></a>
+                                        <a href="new_edit.vm?id=$!{item.id}" class="btn btn-info btn-xs ">
+                                            <i class="fa fa-pencil"></i></a>
+                                        <a date-target="$!{item.id}" onclick="javascript:deletescript($!{item.id})"  class="btn btn-danger btn-xs"><i
+                                             class="fa fa-times"></i></a>
+                                    </td>
+                                </tr>
+                                #end
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+    </div><!-- content -->
+    <div id="footer"></div>
+</div>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="refresh" content="30">
+
+    #parse("common/meta.vm")
+
+
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class=" float-e-margins">
+                <div class="ibox-title" style="width:auto;height:55px;margin-top:-25px ">
+
+
+                #*<button type="button" id="btn_add" class="btn btn-primary" style="margin-left:30px">添加任务</button>*#
+                </div>
+
+                <div class="ibox-content">
+                    <div class="project-list">
+
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+
+                                <th>Agent名称</th>
+                                <th>任务名称</th>
+                                <th>上次运行时间</th>
+                                <th>状态</th>
+                                <th align="right">操作</th>
+
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                                #foreach(${item} in $!{detailList})
+                                <tr>
+                                    <td class="project-status">
+                                        ${item.agentName}
+                                    </td>
+                                    <td class="project-status">
+                                        ${item.timerName}
+                                    </td>
+                                    <td class="project-status">
+                                        $!dateUtil.format(${item.lastRuntime},"yyyy-MM-dd HH:mm:ss")
+                                    </td>
+                                    <td class="project-status">
+                                        #if($!{item.status} == 0)
+                                            离线
+                                        #elseif($!{item.status} == 1)
+                                            等待运行
+                                        #elseif($!{item.status} == 2)
+                                            正在运行
+                                        #elseif($!{item.status} == 3)
+                                            停止
+                                        #end
+                                    </td>
+
+                                    <td class="project-status">
+
+                                        <a class="btn btn-primary btn-circle"  title="查看详细" onclick="finddetail($!{item.timerId},$!{item.agentId})"><i class="fa fa-list"></i></a>
+
+
+
+                                    </td>
+
+                                </tr>
+                                #end
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+
+            function finddetail(timerid,agentid) {
+
+                addModal("view_detial","明细列表", function(obj) {
+
+                    $.ajax({
+
+                        url: '/agent/finddetail',
+                        data: {'agentid':agentid,"timerid":timerid},
+                        type: "POST",
+                        success: function (data) {
+
+
+                            $(obj).html(data);
+                            //window.location.reload();
+                        }
+                    });
+                },700,300,60,"true");
+
+            }
+
+
+        </script>
+
+</body>
+</html>

@@ -1,0 +1,57 @@
+#*自定义宏*#
+
+##分页
+#macro(showPage $page $url)
+    #if($page != "")
+    <nav>
+    <ul class="pagination">
+    #if($page.extInfo&&$page.extInfo.equals("")==false)
+        <i class="ico-tip"></i>$page.extInfo
+    #end
+        ##每页显示<input id="page-pageSize" class="text w30" type="text" value="$page.pageSize" onKeyup="XUI.form.setPageSize($page.pageSize,this,event);"/>$page.unit,共$page.totalCount$page.unit记录.
+    #if($page.firstPage == false)
+        <li><a class="pre" href="$url&currentPage=$page.previousPage">&larr;上页</a></li>
+        <li><a href="$url&currentPage=1">1</a></li>
+    #end
+    #set($pagePos = 5) ##当前页的尾巴长度
+    #if($page.currentPage>$pagePos+2)
+        <li><a>...</a></li>  ##显示前面的省略号
+    #end
+    #foreach($i in [$pagePos..1]) ##增加前面的尾巴
+        #if($page.currentPage - $i > 1)
+        #set($pageIndex= $page.currentPage - $i)
+            <li><a href="$url&currentPage=$pageIndex">$pageIndex</a></li>
+        #end
+    #end
+        <li class="active"><a>$page.currentPage</a></li>##显示当前页号
+    #foreach($i in [1..$pagePos]) ##增加后面的尾巴
+        #if($page.pageCount - $page.currentPage - $i > 0)
+        #set($pageIndex= $page.currentPage + $i)
+            <li><a href="$url&currentPage=$pageIndex">$pageIndex</a></li>
+        #end
+    #end
+    #if($page.pageCount - $page.currentPage > $pagePos+1)
+        <li><a>...</a></li>##显示后面的省略号
+    #end
+    #if($page.hasNextPage())
+        <li><a href="$url&currentPage=$page.pageCount">$page.pageCount</a></li>
+        <li><a class="next" href="$url&currentPage=$page.nextPage">下页&rarr;</a></li>
+    #end
+    </ul>
+    </nav>
+
+    #end
+    ##增加底部占位空间。
+    <p style="height:100px;"> &nbsp;</p>
+#end
+
+
+##排序
+#macro(sorting $obj $field)
+#if($obj && $obj.orderField == $field)
+ class="sorting_$obj.orderFieldType" data-orderFieldType="$obj.orderFieldNextType" 
+#else
+ class="sorting" data-orderFieldType="DESC" 
+#end
+ data-orderField="$field" 
+#end

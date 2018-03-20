@@ -1,0 +1,25 @@
+/*
+ * layer皮肤
+ *
+ */
+/* 选择器格式为：html #layui_layer_skin文件夹名stylecss，这一点非常重要 */
+html #layui_layer_skinerrorstylecss {
+    display: none;
+    position: absolute;
+    width: 1989px;
+}
+
+body .layer-ext-error .layui-layer-title {
+    text-align: center;
+    color: #fff;
+    background-color: #DA4453;
+    border-color: #DA4453;
+}
+
+body .layer-ext-error .layui-layer-btn a {
+    background: #d9edf7
+}
+
+body .layer-ext-error .layui-layer-btn .layui-layer-btn1 {
+    background: #d9edf7
+}

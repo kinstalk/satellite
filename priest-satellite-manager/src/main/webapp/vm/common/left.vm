@@ -1,0 +1,149 @@
+<link rel="stylesheet" href=" /js/zTree/zTreeStyle.css" type="text/css">
+<script type="text/javascript" src="/js/zTree/jquery.ztree.core-3.5.min.js"></script>
+<script type="text/javascript" src="/js/zTree/jquery.ztree.excheck-3.5.min.js"></script>
+<script type="text/javascript">
+    var common_menu_zTree_setting = {
+        data: {
+            simpleData: {
+                enable: false
+            }
+        }
+    };
+
+##    var common_menu_zTree_zNodes = $!{MenuUserList};
+
+
+    $(document).ready(function(){
+
+
+
+        var f=${MenuUserList};
+        var json =eval(${MenuUserList});
+        for(var i=0;i<json.length;i++){
+
+
+            var menuObject=json[i];
+
+            if(menuObject.level==1) {
+                var list="<div  id='div_out_"+menuObject.id+"' class='panel panel-default'>"
+                        +"<div  id=div_inner_1_"+menuObject.id+"' class='accordion-heading'>"
+                        +"<a data-target='#div_inner_2_"+menuObject.id+"' class='list-group-item' data-parent='#menu-1' data-toggle='collapse'>"+menuObject.name+"<i class='glyphicon glyphicon-chevron-right'></i></a>"
+                        +"</div>"
+                        +"<div name='"+menuObject.id+"'  id='div_inner_2_"+menuObject.id+"' class='accordion-body collapse'>"
+                        +"</div>"
+                $("#menu-1").append(list);
+
+            }
+            if(menuObject.level==2){
+                var list2=" <a class='show-inner list-group-item' href='"+menuObject.url+"'><i class='active glyphicon glyphicon-home'></i>"+menuObject.name+"</a>";
+                $("#div_inner_2_"+menuObject.parentId).append(list2);
+
+            }
+
+
+        }
+        $(".accordion-body a").each(function () {
+            cur_href = $(this).attr("href");
+            if( cur_href.substring(0, cur_href.lastIndexOf("/")) == request_uri.substring(0, request_uri.lastIndexOf("/"))) {
+                //alert($(this).parent().html());
+                //alert($(this).parent().prev().children("a").children("i").size())
+                $(this).parent().removeClass("in").addClass("in");
+                $(this).parent().prev().children("a").children("i").removeClass('glyphicon-chevron-right').addClass('glyphicon-chevron-down');;
+
+            }
+        });
+
+    });
+
+
+</script>
+<div id="common_menu_tree" class="left">
+    <ul id="common_menu_zTree_id" class="ztree"></ul>
+</div>
+
+
+
+
+<div id="left" class="col-xs-3 col-sm-3 sidebar-offcanvas" style="position: relative;" role="navigation">
+
+        <ul class="list-group panel">
+
+            <li class="list-group-item"><i class="glyphicon glyphicon-align-justify"></i> <a href="#" > SIDE PANEL</a></b></li>
+            <div id="menu-1" class="accordion panel-group" >
+
+
+
+##                <div class="panel panel-default">
+##                    <div class="accordion-heading">
+##                        <a data-target="#collapse-10" class="list-group-item" data-parent="#menu-1" data-toggle="collapse">权限管理<i class="glyphicon glyphicon-chevron-right"></i></a>
+##                    </div>
+##                    <div id="collapse-10" class="accordion-body collapse">
+##                        <a class="list-group-item" href="$!{ct}/admin/list.vm" ><i class="glyphicon glyphicon-font"></i>用户管理</a>
+##                        <a class="list-group-item" href="$!{ct}/menu/list.vm" ><i class="glyphicon glyphicon-minus"></i>菜单管理</a>
+##                        <a class="list-group-item" href="$!{ct}/group/list.vm" ><i class="glyphicon glyphicon-list"></i>菜单组管理</a>
+##
+##                    </div>
+##                </div>
+##
+##
+##
+##                <div class="panel panel-default">
+##                    <div class="accordion-heading">
+##                        <a data-target="#collapse-11" class="list-group-item" data-parent="#menu-1" data-toggle="collapse">健康展示<i class="glyphicon glyphicon-chevron-right"></i></a>
+##                    </div>
+##                    <div id="collapse-11" class="accordion-body collapse ">
+##
+##                        <a class="show-inner list-group-item" href="$!{ct}/report/module_list.vm?appId=1" target="_blank"><i class="active glyphicon glyphicon-home"></i>WithU当前状态 </a>
+##                        <a class="show-inner list-group-item" href="$!{ct}/report/week_list.vm?appId=1"><i class="glyphicon glyphicon-certificate"></i>WithU一周状态 </a>
+##
+##                        <a class="show-inner list-group-item" href="$!{ct}/report/module_list.vm?appId=2" target="_blank"><i class="active glyphicon glyphicon-home"></i>奇技当前状态 </a>
+##                        <a class="show-inner list-group-item" href="$!{ct}/report/week_list.vm?appId=2"><i class="glyphicon glyphicon-certificate"></i>奇技一周状态 </a>
+##                    </div>
+##
+##
+##                </div>
+##
+##                <div class="panel panel-default">
+##                    <div class="accordion-heading">
+##                        <a data-target="#collapse-12" class="list-group-item" data-parent="#menu-1" data-toggle="collapse">服务监控<i class="glyphicon glyphicon-chevron-right"></i></a>
+##                    </div>
+##                    <div id="collapse-12" class="accordion-body collapse ">
+##                        <a class="list-group-item" href="$!{ct}/script/list.vm" ><i class="glyphicon glyphicon-font"></i>监控脚本</a>
+##                        <a class="list-group-item" href="$!{ct}/run/list.vm" ><i class="glyphicon glyphicon-minus"></i>监控任务</a>
+##                        <a class="list-group-item" href="$!{ct}/agent/list.vm" ><i class="glyphicon glyphicon-list-alt"></i>监控端</a>
+##                        <a class="list-group-item" href="$!{ct}/pool/detail.vm" ><i class="glyphicon glyphicon-th-list"></i>测试号段</a>
+##                        <a class="list-group-item" href="$!{ct}/agent/showlist.vm" ><i class="glyphicon glyphicon-tint"></i>运行状态</a>
+##                    </div>
+##                </div>
+
+            <div id="menu-2" class="accordion" style="display: none;">
+                <li>
+                    <a href="#demo3" class="list-group-item " data-toggle="collapse">Item 3  <span class="glyphicon glyphicon-chevron-right"></span></a>
+                    <div class="collapse" id="demo3">
+                        <a href="#SubMenu1" class="list-group-item" data-toggle="collapse">Subitem 1  <span class="glyphicon glyphicon-chevron-right"></span></a>
+                        <div class="collapse list-group-submenu" id="SubMenu1">
+                            <a href="#" class="list-group-item">Subitem 1 a</a>
+                            <a href="#" class="list-group-item">Subitem 2 b</a>
+                            <a href="#SubSubMenu1" class="list-group-item" data-toggle="collapse">Subitem 3 c <span class="glyphicon glyphicon-chevron-right"></span></a>
+                            <div class="collapse list-group-submenu list-group-submenu-1" id="SubSubMenu1">
+                                <a href="#" class="list-group-item">Sub sub item 1</a>
+                                <a href="#" class="list-group-item">Sub sub item 2</a>
+                            </div>
+                            <a href="#" class="list-group-item">Subitem 4 d</a>
+                        </div>
+                        <a href="javascript:;" class="list-group-item">Subitem 2</a>
+                        <a href="javascript:;" class="list-group-item">Subitem 3</a>
+                    </div>
+                </li>
+                <li>
+                    <a href="#demo4" class="list-group-item " data-toggle="collapse">Item 4  <span class="glyphicon glyphicon-chevron-right"></span></a>
+                <li class="collapse" id="demo4">
+                    <a href="" class="list-group-item">Subitem 1</a>
+                    <a href="" class="list-group-item">Subitem 2</a>
+                    <a href="" class="list-group-item">Subitem 3</a>
+                </li>
+                </li>
+            </div>
+
+        </ul>
+</div>

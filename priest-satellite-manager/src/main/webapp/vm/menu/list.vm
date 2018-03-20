@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("common/head.vm")
+</head>
+<body>
+<!--header-->
+    #parse("common/nav.vm")
+
+<div class="container-fluid">
+    <!--documents-->
+    <div id="content" class="row row-offcanvas row-offcanvas-left">
+        #parse("common/left.vm")
+
+        <div id="right" class="col-xs-12 col-sm-9 content">
+
+            <div id="pageCanvasInt" class="canvasInt">
+
+
+                <div class="panel panel-default">
+                    <div id="tabs_div">
+                        <table width="100%"  border="0" cellpadding="0" cellspacing="1" class="table-hover">
+                            <tr>
+                                <td class="dataGrid_head" style="font-weight: bold;" colspan="3">
+                                    <a href="/menu/edit.vm" class="btn btn-primary" role="button">增加菜单</a>
+                                </td>
+                            </tr>
+                           <tr>
+                               <td>
+                                   $!menuUtils.loopMenu($!menuList)
+
+                               </td>
+
+                           </tr>
+
+                        </table>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+</body>
+</html>
+
+

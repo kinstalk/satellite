@@ -1,0 +1,15 @@
+/*
+ * layer皮肤
+ *
+ */
+/* 选择器格式为：html #layui_layer_skin文件夹名stylecss，这一点非常重要 */
+html #layui_layer_skinprogressstylecss {
+    display: none;
+    position: absolute;
+    width: 1989px;
+}
+
+body .layer-ext-progress .layui-layer-title {
+    text-align: center;
+    background-color:rgba(0,0,0,0.2)
+}

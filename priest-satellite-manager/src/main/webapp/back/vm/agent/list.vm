@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    #parse("common/meta.vm")
+
+
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class=" float-e-margins">
+                <div class="ibox-title" style="width:auto;height:55px;margin-top:-25px ">
+                    <div align="right">
+                        <button type="button" class="btn btn-primary"  id="addtask" onclick="addagent()" data-target="#addScript">
+                            添加
+                        </button>
+                    </div>
+
+
+                #*<button type="button" id="btn_add" class="btn btn-primary" style="margin-left:30px">添加任务</button>*#
+                </div>
+
+                <div class="ibox-content">
+                    <div class="project-list">
+
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>地域信息</th>
+                                <th>IP地址</th>
+                                <th>端口</th>
+                                <th>状态</th>
+                                <th align="right">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                #foreach(${item} in $!{list})
+                                <tr class="footable-even" style="display: table-row;">
+
+
+                                    <td class="project-status">
+                                        $!{item.agentArea}
+                                    </td>
+                                    <td class="project-status">
+                                        $!{item.agentIp}
+                                    </td>
+                                    <td class="project-status">
+                                        $!{item.agentPort}
+                                    </td>
+                                    <td class="project-status">
+
+                                        #if($!{item.status} != 0)
+                                           在线
+                                        #else
+                                           离线
+                                        #end
+
+                                    </td>
+                                    <td class="project-status">
+                                        <button id="btn_stop" onclick="update($!{item.agentId})" class="btn btn-warning btn-circle" type="button">修改</button>
+                                        <button id="btn_delete" onclick="deleteagent($!{item.agentId})" class="btn btn-warning btn-circle" type="button">删除</button>
+                                    </td>
+                                </tr>
+
+
+                                #end
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <script type="text/javascript">
+
+
+
+
+
+            function run(id) {
+                $.ajax({
+                    url: '/run/run_timer',
+                    data: {'id':id},
+                    type: "POST",
+                    success: function (data) {
+
+                        if(data=='处于运行状态'){
+
+                            swal("WARN", "处于运行状态,不能再重复执行", "");
+                           // alert(data);
+                            return;
+
+                        }
+                        window.location.reload();
+                    }
+                });
+
+            }
+
+            function update(id) {
+
+
+                addModal("add_agent","", function(obj) {
+
+                    $.ajax({
+                        url: '/agent/addpage',
+                        data: {'id':id},
+                        type: "POST",
+                        success: function (data) {
+                            $(obj).html(data);
+                        }
+                    });
+                },700,350,60);
+
+            }
+
+            function deleteagent(id) {
+                $.ajax({
+                    url: '/agent/delete',
+                    data: {'id':id},
+                    type: "POST",
+                    success: function (data) {
+
+                        if(data=='fail'){
+                            swal("WARN", "删除失败", "");
+
+                            return;
+                        }
+                        window.location.reload();
+                    }
+                });
+            }
+            function showdetail(id) {
+
+                addModal("view_detial","明细列表", function(obj) {
+
+                    $.ajax({
+
+                        url: '/agent/showdetail',
+                        data: {'id':id},
+                        type: "POST",
+                        success: function (data) {
+
+
+                            $(obj).html(data);
+                            //window.location.reload();
+                        }
+                    });
+                },500,150,30,"true");
+
+            }
+            function addagent() {
+
+                addModal("add_agent","", function(obj) {
+
+                    $.ajax({
+
+                        url: '/agent/addpage',
+                        type: "POST",
+                        success: function (data) {
+
+
+                            $(obj).html(data);
+                            //window.location.reload();
+                        }
+                    });
+                },700,350,60);
+
+            }
+
+
+        </script>
+
+</body>
+</html>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        "
+       default-autowire="byName">
+
+    <context:component-scan base-package="com.kinstalk.satellite.service.**"/>
+
+    <!-- 增加 service注入属性。-->
+    <context:property-placeholder file-encoding="UTF-8" location="classpath:project.properties"/>
+    <context:property-placeholder file-encoding="UTF-8" location="classpath:jdbc.properties"/>
+
+    <import resource="classpath:spring-dao.xml"/>
+    <import resource="classpath:spring-mail.xml"/>
+    <import resource="classpath:spring-config-service.xml"/>
+
+</beans>

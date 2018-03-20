@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("common/head.vm")
+</head>
+<body>
+<!--header-->
+    #parse("common/nav.vm")
+
+<div class="container-fluid">
+    <!--documents-->
+    <div id="content" class="row row-offcanvas row-offcanvas-left">
+        <!--left-->
+        #parse("common/left.vm")
+
+        <div id="right" class="col-xs-12 col-sm-9 content">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-md-11">
+                            <h3 class="panel-title"><a href="javascript:void(0);" class="toggle-sidebar"><span class="fa fa-angle-double-left" data-toggle="offcanvas" title="Maximize Panel"></span></a>
+                                监控任务 - 编辑/新增</h3>
+                        </div>
+                        <div class="col-md-1">
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="panel-body">
+                    <div class="col-xs-12 col-sm-12">
+                        <form method="get" id="runForm" class="form-horizontal">
+
+                            <input type="hidden" name="id" value="$!{runScriptTimer.id}">
+
+                            <div class="form-group" >
+                                <label  class="col-sm-2 control-label">选择脚本:</label>
+
+                                <div class="col-sm-4" >
+                                    <select class="form-control m-b" id="scriptId" name="scriptId" required>
+                                        <option>===请选择===</option>
+                                        #foreach(${item} in $!{scriptlist})
+                                            <option value='${item.id}' #if($!{item.id}==${runScriptTimer.scriptId}) selected='selected' #end>${item.name}</option>
+                                        #end
+                                    </select>
+                                </div>
+
+
+                                <label  class="col-sm-2 control-label">任务名称:</label>
+
+                                <div class="col-md-4" >
+                                    <input class="form-control m-b" id="name" name="name" value="$!{runScriptTimer.name}" type="text" required>
+
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">任务类型:</label>
+                                <div class="col-sm-4" >
+                                    <select class="form-control m-b" name="runType" required>
+                                        <option value="1" #if(1==${runScriptTimer.runType}) selected='selected' #end>监控执行
+                                        </option>
+                                        <option value="2" #if(2==${runScriptTimer.runType}) selected='selected' #end>测试执行
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <label  class="col-sm-2 control-label">负责人:</label>
+                                <div class="col-md-4" >
+                                    <input class="form-control m-b" id="duty" name="duty" value="$!{runScriptTimer.duty}"  type="text" required>
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+
+                                <label  class="col-sm-2 control-label">报警手机:</label>
+                                <div class="col-md-4" >
+
+                                    <textarea id="noticePhone" class="form-control m-b" name="noticePhone"  >$!{runScriptTimer.noticePhone}</textarea>
+                                </div>
+
+
+
+                                <label  class="col-sm-2 control-label">报警邮箱:</label>
+                                <div class="col-md-4" >
+
+                                    <textarea id="noticeEmail" class="form-control m-b" name="noticeEmail"    >$!{runScriptTimer.noticeEmail}</textarea>
+
+                                </div>
+
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label class="col-sm-2 control-label">执行次数:</label>
+                                <div class="col-sm-4" >
+                                    <select class="form-control m-b" name="timerType" onchange="changeSelect($(this))" >
+                                        <option value="2"  #if(2==${runScriptTimer.timerType}) selected='selected' #end>循环执行
+                                        </option>
+                                        <option value="1"  #if(1==${runScriptTimer.timerType}) selected='selected' #end>执行一次
+                                        </option>
+
+                                    </select>
+                                </div>
+
+
+                                <div id="sleeptime" #if(${runScriptTimer.id}>0&&1==${runScriptTimer.timerType}) class="hidden" #end>
+                                <label class="col-sm-2 control-label">执行频次:</label>
+                                <div class="col-sm-4" style="width:200px">
+                                    <select class="form-control m-b" name="sleepTime" >
+                                        <option value="0" selected="selected" >请选择</option>
+                                        <option value="5"  #if(5==${runScriptTimer.sleepTime}) selected='selected' #end>&nbsp;5分钟/次 </option>
+                                        <option value="10" #if(10==${runScriptTimer.sleepTime}) selected='selected' #end>10分钟/次</option>
+                                        <option value="15" #if(15==${runScriptTimer.sleepTime}) selected='selected' #end>15分钟/次</option>
+
+                                    </select>
+                                </div>
+                                </div>
+
+                            </div>
+
+
+                            <div class="modal-footer">
+                                <a href="list.vm" type="button" id="btn_add_close" class="btn btn-white">返回</a>
+                                <button type="button" id="btn_run_add" onclick="btnadd()"  class="btn btn-primary">保存</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="$!{ct}/js/timer/timer.js"></script>
+</body>
+</html>

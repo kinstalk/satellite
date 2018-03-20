@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.kinstalk</groupId>
+        <artifactId>priest-parent</artifactId>
+        <version>1.0.2</version>
+    </parent>
+
+
+    <artifactId>satellite</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0.0-SNAPSHOT</version>
+    <modules>
+        <module>priest-satellite-api</module>
+        <module>priest-satellite-common</module>
+        <module>priest-satellite-domain</module>
+        <module>priest-satellite-manager</module>
+        <module>priest-satellite-agent</module>
+    </modules>
+
+    <properties>
+        <jdk.version>1.6</jdk.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+        <spring.version>3.1.4.RELEASE</spring.version>
+        <slf4j.version>1.7.25</slf4j.version>
+        <logback.version>1.2.3</logback.version>
+
+    </properties>
+
+    <distributionManagement>
+        <repository>
+            <id>nexus-releases</id>
+            <name>Nexus aliyun</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
+        </repository>
+    </distributionManagement>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- logging start -->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>jcl-over-slf4j</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>jul-to-slf4j</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>log4j-over-slf4j</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback.version}</version>
+            </dependency>
+            <!-- logging end -->
+
+
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-webmvc</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-core</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-beans</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context-support</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-expression</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-test</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-jdbc</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-web</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-aop</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-tx</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-jdbc</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-test</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>3.4</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/org.apache.tomcat/tomcat-jdbc -->
+            <dependency>
+                <groupId>org.apache.tomcat</groupId>
+                <artifactId>tomcat-jdbc</artifactId>
+                <version>8.5.4</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <!-- 打包配置信息 -->
+    <profiles>
+        <profile>
+            <!-- 开发环境 -->
+            <id>develop</id>
+            <!-- 默认 -->
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>priest-satellite-manager</module>
+            </modules>
+            <properties>
+                <!--jdbc type -->
+                <priest.jdbc.datasource.type>dbcp</priest.jdbc.datasource.type>
+                <!-- 数据库 -->
+                <priest.jdbc.driver>com.mysql.jdbc.Driver</priest.jdbc.driver>
+                <priest.jdbc.url>jdbc:mysql://192.168.2.101:3306/satellite?characterEncoding=UTF-8</priest.jdbc.url>
+                <priest.jdbc.username>priest</priest.jdbc.username>
+                <priest.jdbc.password>priest</priest.jdbc.password>
+
+                <priest.c3p0.acquireIncrement>2</priest.c3p0.acquireIncrement>
+                <priest.c3p0.idleConnectionTestPeriod>50</priest.c3p0.idleConnectionTestPeriod>
+                <priest.c3p0.initialPoolSize>5</priest.c3p0.initialPoolSize>
+                <priest.c3p0.maxIdleTime>90</priest.c3p0.maxIdleTime>
+                <priest.c3p0.maxPoolSize>20</priest.c3p0.maxPoolSize>
+                <priest.c3p0.minPoolSize>5</priest.c3p0.minPoolSize>
+
+                <!-- 日志 -->
+                <priest.log.level>DEBUG</priest.log.level>
+                <priest.log.path>/data/logs</priest.log.path>
+
+                <!-- jmx -->
+                <jmeter.jmx.path>/data/jmx</jmeter.jmx.path>
+                <jmeter.run.path>/data/script/runjmeter</jmeter.run.path>
+
+                <!--打包编码 -->
+                <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+                <!--return url -->
+                <priest.return.url>http://127.0.0.1:9088/passport/index?returnUrl=http://127.0.0.1:9088
+                </priest.return.url>
+
+            </properties>
+        </profile>
+
+        <profile>
+            <!-- 生产环境 -->
+            <id>NewOnline</id>
+            <modules>
+                <module>priest-satellite-manager</module>
+            </modules>
+            <properties>
+                <!--jdbc type -->
+                <priest.jdbc.datasource.type>dbcp</priest.jdbc.datasource.type>
+                <!-- 数据库 -->
+                <priest.jdbc.driver>com.mysql.jdbc.Driver</priest.jdbc.driver>
+                <!--<priest.jdbc.url>jdbc:mysql://internal-mycat-internal-prodnew-808594453.cn-north-1.elb.amazonaws.com.cn:8066/satellite</priest.jdbc.url>-->
+                <priest.jdbc.url>
+                    jdbc:mysql://priest-prodnew.cln8gouzs0ut.rds.cn-north-1.amazonaws.com.cn:3306/satellite
+                </priest.jdbc.url>
+                <priest.jdbc.username>satellite</priest.jdbc.username>
+                <priest.jdbc.password>Kins2014satellite</priest.jdbc.password>
+
+                <priest.c3p0.acquireIncrement>2</priest.c3p0.acquireIncrement>
+                <priest.c3p0.idleConnectionTestPeriod>50</priest.c3p0.idleConnectionTestPeriod>
+                <priest.c3p0.initialPoolSize>5</priest.c3p0.initialPoolSize>
+                <priest.c3p0.maxIdleTime>90</priest.c3p0.maxIdleTime>
+                <priest.c3p0.maxPoolSize>20</priest.c3p0.maxPoolSize>
+                <priest.c3p0.minPoolSize>5</priest.c3p0.minPoolSize>
+
+                <!-- 日志 -->
+                <priest.log.level>INFO</priest.log.level>
+                <priest.log.path>/data/logs</priest.log.path>
+
+                <!-- jmx -->
+                <jmeter.jmx.path>/data/jmx</jmeter.jmx.path>
+                <jmeter.run.path>/data/script/runjmeter</jmeter.run.path>
+
+                <!--打包编码 -->
+                <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+                <!--return url -->
+                <priest.return.url>
+                    http://monitor.shuzijiayuan.com/passport/index?returnUrl=http://monitor.shuzijiayuan.com
+                </priest.return.url>
+
+            </properties>
+        </profile>
+        <profile>
+            <!-- 线上测试环境 -->
+            <id>online-test</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <!--是否使用线上环境下发短信-->
+                <priest.env.sms.online>false</priest.env.sms.online>
+
+                <!-- 数据库 -->
+                <priest.jdbc.driver>com.mysql.jdbc.Driver</priest.jdbc.driver>
+                <!--<priest.jdbc.url>jdbc:mysql://172.31.9.124:8066/satellite?characterEncoding=UTF-8</priest.jdbc.url>-->
+                <!--<priest.jdbc.username>satellite</priest.jdbc.username>-->
+                <!--<priest.jdbc.password>adminPriest</priest.jdbc.password>-->
+
+                <priest.jdbc.url>jdbc:mysql://172.31.9.101:3306/satellite?characterEncoding=UTF-8</priest.jdbc.url>
+                <priest.jdbc.username>priest</priest.jdbc.username>
+                <priest.jdbc.password>priestTest</priest.jdbc.password>
+
+                <priest.c3p0.acquireIncrement>2</priest.c3p0.acquireIncrement>
+                <priest.c3p0.idleConnectionTestPeriod>50</priest.c3p0.idleConnectionTestPeriod>
+                <priest.c3p0.initialPoolSize>5</priest.c3p0.initialPoolSize>
+                <priest.c3p0.maxIdleTime>90</priest.c3p0.maxIdleTime>
+                <priest.c3p0.maxPoolSize>20</priest.c3p0.maxPoolSize>
+                <priest.c3p0.minPoolSize>5</priest.c3p0.minPoolSize>
+
+                <!-- 日志 -->
+                <priest.log.level>DEBUG</priest.log.level>
+                <priest.log.path>/data/logs</priest.log.path>
+
+                <!-- jmx -->
+                <jmeter.jmx.path>/data/jmx</jmeter.jmx.path>
+                <jmeter.run.path>/data/script/runjmeter</jmeter.run.path>
+
+                <!--打包编码 -->
+                <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+                <!--return url -->
+                <priest.return.url>
+                    http://monitor.shuzijiayuan.com/passport/index?returnUrl=http://monitor.shuzijiayuan.com
+                </priest.return.url>
+
+
+            </properties>
+        </profile>
+        <!-- 初始化数据库 -->
+        <profile>
+            <id>init-db</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.dbunit</groupId>
+                    <artifactId>dbunit</artifactId>
+                    <version>2.4.8</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.poi</groupId>
+                    <artifactId>poi</artifactId>
+                    <version>3.2-FINAL</version>
+                </dependency>
+            </dependencies>
+
+        </profile>
+
+    </profiles>
+
+</project>

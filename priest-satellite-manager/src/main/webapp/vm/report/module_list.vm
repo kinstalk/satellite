@@ -1,0 +1,342 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>API Status | WithU Developers</title>
+    <link type="text/css" rel="stylesheet" href="/css/twitter.css?201702081010"
+          media="all">
+    <link rel="stylesheet" href="$!{ct}/css/sweetalert/sweetalert.css">
+    <style type="text/css">
+        *{margin: 0px; padding: 0px;}
+        body{ font: 12px "Helvetica Neue", Arial, sans-serif; color: #333; -webkit-font-smoothing: antialiased;}
+    </style>
+    <script src="/js/echarts/echarts.js"></script>
+    <script src="/js/jquery-1.10.1.min.js"></script>
+
+
+</head>
+<body>
+<div class="Page Page--canopy is-narrow Page--basicStyles  Page--dev ">
+    <div class="Navigation Navigation--global is-loaded">
+        <div class="Navigation-inner">
+            <ul class="Navigation-inner-list Navigation-inner-list--breadcrumb">
+                <li class="NavigationItem NavigatinItem--main NavigationItem--breadcrumb" style="width:40px;"><a
+                        href="#"></a></li>
+
+                <li class="NavigationItem NavigationItem--main NavigationItem--breadcrumb NavigationItem--withChildren"
+                    data-is-clickable="false"><a class="NavigationItem-link" href="module_list.vm?appId=$!{appId}">Module Status</a>
+
+                </li>
+                <li class="NavigationItem NavigationItem--main NavigationItem--breadcrumb">
+                </li>
+            </ul>
+
+
+        </div>
+    </div>
+    <div class=" Hero is-narrow Hero--dev">
+        <div class="Hero-wrap"></div>
+    </div>
+</div>
+<div id="container">
+    <div style="margin-top: 27px;margin-left: 20px;"></div>
+    <div id="section_curr_status">
+        <h2>Current Performance and Availability Status</h2>
+        <table width="100%" border="0" cellpadding="0" cellspacing="0" class="psp-table" id="table_curr_status">
+
+            <tbody>
+
+                <tr>
+                    <td  align="center" class="tablehead" colspan="2">Current Status / Module</td>
+                    <td align="center" class="tablehead">Last Week Availability Status</td>
+                    <td align="left" class="tablehead">Current MAX</td>
+                    <td align="left" class="tablehead"> Last 24h Status</td>
+                </tr>
+
+##                #if(${list})
+##                    #foreach(${item} in $!{list})
+##                    <tr #if($foreach.count%2==0) class="oddrow" #end>
+##                        <td align="center" width="5%" height="30px">
+##                            <div class="status-icon-container #if($!{item.status} == 1) status-bg-green #else status-bg-red #end"></div>
+##                        </td>
+##                        <td align="center">
+##                            <a href="/report/api_list.vm?moduleId=$!{item.moduleId}&appId=$!{item.appId}" id="$!{item.moduleId}">$!{item.moduleName}</a>
+##
+##                        </td>
+##                        <td align="center">
+##
+##                            <div  id="charts_$!{item.moduleId}" style="width: 740px;height:80px;"></div>
+##                            <script type="text/javascript">
+##                                $(function(){
+##
+##                                    init($!{item.countString},$!{item.moduleId},$!{item.appId});
+##                                })
+##                            </script>
+##
+##                        </td>
+##
+##                        <td align="center" ><span >$!{item.costTime}&nbsp;ms</span></td>
+##                        <td align="center">$!{item.sucRate}
+##
+##                        </td>
+##                    </tr>
+##                    #end
+##                #else
+####                <tr>
+####                    <td height="30px" align="center" colspan="4">无数据</td>
+####                </tr>
+##                #end
+
+            </tbody>
+        </table>
+
+        <input id="appid" type="hidden" value="$!{appId}">
+        <audio id="sound" src="../../audio/6697.wav" type="audio/wav" preload="auto" >dd</audio>
+
+    </div>
+
+    <div id="legend">
+        <center>
+            <span class="legend-status-icon-container legend-status-icon-ok"> Service is operating normally</span>
+            <span class="legend-status-icon-container legend-status-icon-warn"> Performance issues</span>
+            <span class="legend-status-icon-container legend-status-icon-error"> Service disruption</span>
+            <span class="legend-status-icon-container legend-status-icon-notes"> Data Empty </span>
+        </center>
+    </div>
+    <div class="right" id="barter">
+        <span class="floatleft">Health Status for WithU API</span> Powered by the <a
+
+            href="http://www.withugroup.com"
+            target="_blank">WithU </a>
+    </div>
+    <div id="page_loader" class="nodisplay">Loading data...</div>
+</div>
+
+</body>
+
+<script src="$!{ct}/js/jquery-1.10.1.min.js"></script>
+<script src="$!{ct}/js/sweetalert/sweetalert.min.js"></script>
+<script type="text/javascript">
+
+
+
+    $(document).ready(function () {
+
+        var appId=$!{appId};
+        initdata(appId);
+
+
+        varintervalId=setInterval(function(){
+            $.ajax({
+                url: '/report/failapi_list.vm',
+                type: "POST",
+                data:{'appId':$("#appid").val()},
+                success: function (data) {
+
+                    if(data.length>0){
+
+                        //swal("以下接口调用异常", data, "error");
+                        swal({
+                            title: "以下接口调用异常",
+                            text: data,
+                            type: "error",
+                            timer: 5 * 1000
+                        })
+
+//                        $("#sound")[0].play();
+
+                        //$("#sound").attr('autoplay','autoplay');
+
+
+                    }
+
+                }
+            });
+            initdata(appId);
+
+        },1000*60);
+
+
+
+
+    });
+
+
+    function init(data,id,appId){
+
+        var linename=[];//line图名称
+
+        var linevalue=[];//字数
+
+        var linedata=[];//data
+
+        var json=JSON.parse(""+data+"");
+        data = ""
+
+
+
+        for ( var key in json["line"]) {
+            linename.push(key);
+            linevalue.push(json["line"][key]);
+        }
+        json = null;
+
+        
+        var myChart = echarts.getInstanceByDom(document.getElementById('charts_'+id.toString()));
+        if (myChart === undefined) {  
+            myChart = echarts.init(document.getElementById('charts_'+id.toString()));
+        }
+
+
+        option = {
+            title: {
+//                text: '未来一周气温变化',
+//
+            },
+            animation:false,addDataAnimation:false,
+//            textStyle: {
+//                    fontSize: 5,
+//                    fontWeight: 'bolder',
+//                    color: '#333'          // 主标题文字颜色
+//                },
+            tooltip: {
+                trigger: 'axis'
+            },
+//            legend: {
+//                data:['Step Start', 'Step Middle', 'Step End']
+//            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '0%',
+                top:'10%',
+                containLabel: true
+            },
+//            toolbox: {
+//                feature: {
+//                    saveAsImage: {}
+//                }
+//            },
+            xAxis: {
+                left:'10%',
+                type: 'category',
+                data: linename,
+            },
+            yAxis: {
+                type: 'value',
+                splitNumber:2,
+            },
+            emphasis: {
+                label: {show: false},
+                width:100,height:100
+            },
+            series: [
+                {
+                    name:'ErrorApi count',
+                    type:'line',
+                    step: 'end',
+                    data:linevalue,
+                },
+
+            ]
+        };
+        // 填充数据
+        myChart.setOption(option);
+        
+
+        myChart.on('click', function (params) {
+//            var data=params.data;//y轴数据
+            var temp =params;
+            var time = params.name;//x轴数据
+
+//            var data =params.data;
+
+//           alert("name:"+name+" time:"+time+" data:"+data+" id:"+id+" appId:"+appId+" value:"+value);
+
+            window.location.href = "/report/api_list.vm?moduleId="+id+"&appId="+appId+"&time="+time;
+
+        });
+    }
+
+    function initdata(appId){
+
+
+        $.ajax({
+            url: '/report/module_data.vm',
+            type: "POST",
+            data:{'appId':appId},
+            success: function (data) {
+
+                var json =JSON.parse(data);
+
+                data= ""
+                if(json!=null&&json!='') {
+
+                    for (var i = 0; i < json.length; i++) {
+                        var dataObject = json[i];
+                        var ele = document.getElementById('charts_'+dataObject.moduleId);
+                        if(ele) {
+                            var myChart = echarts.getInstanceByDom(ele);
+                            if (myChart) {
+                                echarts.dispose(myChart);
+                            }
+                        }
+                    }
+                }
+                
+                $("#table_curr_status").html('');
+                $("#table_curr_status").append('<tbody>'+
+                '<tr>'+
+                '<td  align="center" class="tablehead" colspan="2">Current Status / Module</td>'+
+                '<td align="center" class="tablehead">Last Week Availability Status</td>'+
+                '<td align="left" class="tablehead">Current MAX</td>'+
+                '<td align="left" class="tablehead"> Last 24h Status</td>'+
+                '</tr>');
+                if(json!=null&&json!=''){
+
+                    for(var i=0;i<json.length;i++){
+                        var dataObject=json[i];
+                        if(dataObject.status ==1){
+                            var statusImage='status-bg-green';
+                        } else{
+                            var statusImage='status-bg-red';
+                        }
+                        if(i%2==0){
+                            var tr="<tr class='oddrow'> "
+                        }else{
+                            var tr="<tr>"
+                        }
+
+
+                       var  list= tr +
+                                "<td align='center' width='5%' height='30px'>"+
+                                "<div class='status-icon-container "+ statusImage+ "'></div>" +
+                                "</td>"+
+                                "<td align='center'>"+
+                                "<a href='/report/api_list.vm?moduleId="+dataObject.moduleId+"&appId="+dataObject.appId+ "' id="+dataObject.moduleId+">"+dataObject.moduleName+"</a>"+
+                                "</td>"+
+                                "<td align='center'>"+
+                                "<div  id='charts_"+dataObject.moduleId+"' style='width: 740px;height:80px;'></div>"+
+
+                                "</td>"+
+                                "<td align='center' ><span >"+dataObject.costTime+"&nbsp;ms</span></td>"+
+                                "<td align='center'>"+dataObject.sucRate+
+                                "</td>"+
+                                "</tr>"
+                        $("#table_curr_status").append(list);
+                        init(dataObject.countString,dataObject.moduleId,dataObject.appId);
+                    }
+                }else{
+                   var    list=" <tr>"+
+                            "<td height='30px' align='center' colspan='4'>无数据</td>"+
+                            "</tr>"
+                    $("#table_curr_status").append(list);
+                }
+                json = ""
+                $("#table_curr_status").append('</tbody>');
+
+            }
+        });
+    }
+
+
+</script>
+</html>

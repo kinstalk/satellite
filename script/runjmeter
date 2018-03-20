@@ -1,0 +1,10 @@
+# jmx file path
+jmxpath=/Users/first/gitlab/qa/jmx
+# jmeter path
+jmeterpath=/Users/first/env/apache-jmeter-2.13/bin/jmeter
+
+# cd workspace
+cd $jmxpath
+# run jmeter
+$jmeterpath -Jworkpath=$workpath $@
+

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    #parse("common/meta.vm")
+
+
+</head>
+
+<body class="gray-bg">
+
+
+<div class="wrapper wrapper-content animated fadeInUp">
+    <div class="row">
+        <div class="col-sm-12">
+
+            <div class="ibox">
+                <div class="ibox-title" style="margin-top:-25px;height:60px;">
+
+
+                    <form id="searchForm" method="post">
+                    #*  <div class="pull-left" style="width:70px;margin-left:10px;text-align: center;padding-top:5px">
+                          <span>创建时间：</span>
+                      </div>
+                      <div class="pull-left input-group input-group-sm date" style="max-width: 175px; width: 176px">
+                          <input class="form-control input-sm" id="dtp_input1" name="beginDate" type="text">
+                          <span id="span_dtp_input1" class="input-group-addon" data-link-field="dtp_input1"><span
+                                  class="glyphicon glyphicon-calendar"></span></span>
+                      </div>
+                      <div class="pull-left" style="width: 50px;margin-left:10px;text-align:center;padding-top:5px">
+                          <span>至</span>
+                      </div>
+
+                      <div class="pull-left input-group input-group-sm date" style="max-width: 175px; width: 176px">
+                          <input class="form-control input-sm" id="dtp_input2" name="endDate" type="text">
+                          <span id="span_dtp_input2" class="input-group-addon" data-link-field="dtp_input2"><span
+                                  class="glyphicon glyphicon-calendar"></span></span>
+                      </div>
+                      <div class="pull-left" style="width: 70px;margin-left:10px;text-align:center;padding-top:5px">
+                          <span>脚本名称:</span>
+                      </div>
+                      &nbsp;
+                      <div class="pull-left input-group input-group-sm date" style="max-width: 150px; width: 176px">
+                          <input class="form-control input-sm" id="scriptname" style="max-width: 175px; width: 176px"
+                                 type="text" placeholder="请输入脚本名称">
+                      </div>
+                      &nbsp;
+
+                      <div class="pull-left input-group input-group-sm date" style="max-width: 150px; width: 100px">
+                          <button type="button" class="btn btn-primary" style="margin-left:20px"> 搜 索</button>
+
+                      </div>*#
+
+                        <div align="right" >
+                            <button type="button" class="btn btn-primary" style="margin-left:10px" data-toggle="modal"
+                                    data-target="#addScript">
+
+                                添加新脚本
+                            </button>
+                        </div>
+
+
+                    </form>
+
+
+                </div>
+
+
+                <div class="modal fade"  id="addScript" tabindex="-1" role="dialog" aria-hidden="true" style="align-self: center" >
+                    <div class="modal-dialog modal-lg" style="width:700px;align-self: center">
+                        <div class="modal-content" style="width: 700px;align-self: center">
+                            <div class="ibox-content" >
+                                <form method="get" id="scriptForm" class="form-horizontal" style="width: 650px;align-self: center;">
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">脚本名称</label>
+
+                                        <div class="col-sm-10" style="width:360px">
+                                            <input type="text" id="name" name="name" class="form-control" value="$!{script.name}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label  class="col-sm-2 control-label"> 脚本文件</label>
+                                        <div class="col-md-10" style="width:360px">
+                                            <input type="text" id="addpath" autocomplete="off" name="path" class="form-control input-sm" style="width:250px;float:left;height: 34px;">
+                                            <span id="spanButtonPlaceHolder"></span>
+
+
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label  class="col-sm-2 control-label"> APP类型</label>
+                                        <div class="col-md-10" style="width:360px">
+                                            <select class="form-control m-b" id="appid" name="appId">
+                                                <option value='1'>WithU</option>
+                                                <option value='2'>奇技</option>
+                                                <option value='3'>亲见</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">备注</label>
+                                        <div class="col-sm-10" style="width:360px">
+                                            <input type="text" name="remark" value="$!{script.remark}" class="form-control">
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" id="btn_add_close" class="btn btn-white" data-dismiss="modal">关闭</button>
+                                <button type="submit" id="btn_save" class="btn btn-primary">保存</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="">
+                    <div class="ibox-content">
+
+##                        <table class="table table-hover ">
+                            <table class="footable table table-stripped toggle-arrow-tiny tablet breakpoint footable-loaded">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>脚本名称</th>
+                                <th>备注</th>
+
+                                <th align="right">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                #foreach(${item} in $!{list})
+                                <tr class="footable-even" style="display: table-row;">
+
+                                    <td>$!{item.id}</td>
+                                    <td> <a href="/script/download?id=$!{item.id}"  role="button" >$!{item.name}</a></td>
+
+                                    <td>$!{item.remark}</td>
+
+                                    <td>
+
+                                        <input type="hidden" name="scriptid" id="scriptid" value="$!{item.id}"/>
+                                    #*  <a href="#myModal5" data-toggle="modal" class="btn btn-white btn-sm"><i
+                                              class="fa fa-folder"></i> 查看 </a>
+                                      <a href="#myModal5" data-toggle="modal" class="btn btn-white btn-sm"><i
+                                              class="fa fa-pencil"></i> 编辑 </a>*#
+
+
+                                        <a id="btn_delete" onclick="deletescript($!{item.id})"  class="btn btn-white btn-sm"><i
+                                                class="fa fa-pencil"></i> 删除</a>
+                                       #* <a id="btn_update" onclick="updatescript($!{item.id})"  class="btn btn-white btn-sm"><i
+                                                class="fa fa-pencil"></i> 修改</a>*#
+                                    </td>
+                                </tr>
+                                #end
+
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    #parse("common/meta.vm")
+
+<script type="text/javascript"> </script>
+</body>
+</html>

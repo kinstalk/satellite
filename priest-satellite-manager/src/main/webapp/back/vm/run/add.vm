@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+
+<body class="gray-bg">
+
+
+             <form   method="post" id="runForm"  >
+
+                  <div style="width:600px" style="border: 1px solid gold">
+                  <div >
+                      <label class="col-sm-2 control-label">选择脚本:</label>
+
+                      <div class="col-sm-10" style="width:200px">
+                          <select class="form-control m-b" id="scriptId" name="scriptId">
+                              <option>===请选择===</option>
+                              #foreach(${item} in $!{scriptlist})
+                                  #if(${item.appId}==1)
+                                      <option value='${item.id}'>${item.name}--withU</option>
+                                  #elseif(${item.appId}==2)
+                                      <option value='${item.id}'>${item.name}--奇技</option>
+                                  #else
+                                      <option value='${item.id}'>${item.name}--亲见</option>
+                                  #end
+
+                              #end
+                          </select>
+
+
+                      </div>
+                  </div>
+                  <div  >
+                      <label  class="col-sm-2 control-label">任务名称:</label>
+                      <div class="col-md-10" style="width:200px">
+                          <input class="form-control m-b" id="name" name="name" type="text">
+                      </div>
+                  </div>
+
+                  </div>
+                  <div style="width:600px ">
+                  <div >
+                      <label class="col-sm-2 control-label">任务类型:</label>
+                      <div class="col-sm-2" style="width:200px">
+                          <select class="form-control m-b" name="runType" >
+                              <option value="1">监控执行
+                              </option>
+                              <option value="2">测试执行
+                              </option>
+                          </select>
+                      </div>
+                  </div>
+
+                      <div >
+                          <label  class="col-sm-2 control-label">负责人:</label>
+                          <div class="col-md-10" style="width:200px">
+                              <input class="form-control m-b" id="duty" name="duty" type="text">
+                          </div>
+                      </div>
+
+                  </div>
+
+                  <div style="width:600px ">
+
+                      <div >
+                          <label  class="col-sm-2 control-label">报警手机:</label>
+                          <div class="col-md-10" style="width:200px">
+
+                              <textarea id="noticePhone" class="editor" name="noticePhone" style=" height: 30px; width: 180px"></textarea>
+                          </div>
+                      </div>
+
+                      <div >
+                          <label  class="col-sm-2 control-label">报警手邮箱:</label>
+                          <div class="col-md-10" style="width:200px">
+
+                              <textarea id="noticeEmail" class="editor" name="noticeEmail" style=" height: 30px; width: 180px"></textarea>
+
+                          </div>
+                      </div>
+                  </div>
+                  <div style="width:600px ">
+
+                  <div >
+                      <label class="col-sm-2 control-label">执行次数:</label>
+                      <div class="col-sm-2" style="width:200px">
+                          <select class="form-control m-b" name="timerType" onchange="changeSelect($(this))">
+                              <option value="1">执行一次
+                              </option>
+                              <option value="2">循环执行
+                              </option>
+                          </select>
+                      </div>
+                  </div>
+
+
+
+                  <div id="sleeptime" class="hidden">
+                      <label class="col-sm-2 control-label">执行时间间隔:</label>
+                      <div class="col-sm-10" style="width:200px">
+                          <select class="form-control m-b" name="sleepTime">
+                              <option value="0" selected="selected" >请选择
+                              </option>
+                              <option value="5" >5分钟 </option>
+                              <option value="10" >10分钟</option>
+                              <option value="20" >20分钟</option>
+                              <option value="20" >40分钟</option>
+                              <option value="60" >60分钟</option>
+                              <option value="90" >90分钟</option>
+                              <option value="120" >120分钟</option>
+                          </select>
+                      </div>
+                  </div>
+                  </div>
+              </form>
+              <div class="modal-footer">
+                  <button type="button" id="btn_add_close" class="btn btn-primary" data-dismiss="modal">关闭</button>
+                  <button type="submit" id="btn_run_add" onclick="btnadd()"  class="btn btn-primary">保存</button>
+              </div>
+
+
+<script type="text/javascript">
+
+    function btnadd() {
+        var name=$("#name").val();
+        var filepath=$("#scriptId").val();
+        var textmoblie=$("#noticePhone").val();
+        var noticeEmail=$("#noticeEmail").val();
+        if(name==null||name==''){
+
+            alert("请填写名称");
+            return;
+        }
+
+
+        if(filepath==null||filepath==''||filepath=='===请选择==='){
+
+
+            alert("请填选择脚本");
+            return;
+        }
+
+
+        if(textmoblie==null||textmoblie==''){
+
+            alert("请填写手机号");
+            return;
+        }
+
+        var regexMoblie = /(^1[3|4|5|8][0-9]\d{8}$)|(1[3|4|5|8][0-9]\d{8};){1,}(1[3|4|5|8][0-9]\d{8}$)/;
+        if (!regexMoblie.test(textmoblie)){
+            alert("手机号格式不正确");
+            return false;
+        }
+
+        if(noticeEmail==null||noticeEmail==''){
+
+            alert("请填邮箱");
+            return;
+        }
+
+
+
+
+        var regexEmail =  /^(([0-9a-zA-Z]+)|([0-9a-zA-Z]+[_.0-9a-zA-Z-]*[0-9a-zA-Z]+))@([a-zA-Z0-9-]+[.])+(net|NET|com|COM|gov|GOV|mil|MIL|org|ORG|edu|EDU|int|INT)$/;
+        if (!regexEmail.test(noticeEmail)){
+            alert("邮箱格式不正确");
+            return false;
+        }
+
+
+
+        $.ajax({
+            url: '/run/save',
+            data: $("#runForm").serialize(),
+            type: "POST",
+            success: function (data) {
+
+                $("#btn_add_close").click();
+                window.location.reload();
+            }
+        });
+    }
+</script>
+</body>
+</html>

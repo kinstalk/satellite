@@ -1,0 +1,10 @@
+<DIV id="navBar" title="出错啦">
+	<li><a href="$!{contextPath}/">首页</a> <span class="divider">/</span></li>
+	<li class="active">错误页面</li>
+</DIV>
+<div class="alert alert-error">
+	<strong>$!{value.code}！</strong>$!{value.result}
+</div>
+#if($!{value.data})
+<pre class="red"><a class="close" data-dismiss="alert">×</a>$!{value.data}</pre>
+#end

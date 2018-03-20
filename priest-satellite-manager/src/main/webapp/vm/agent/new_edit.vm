@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    #parse("common/head.vm")
+    </head>
+
+    <body>
+    <!--header-->
+        #parse("common/nav.vm")
+
+    <div class="container-fluid">
+        <!--documents-->
+        <div id="content" class="row row-offcanvas row-offcanvas-left">
+            <!--left-->
+            #parse("common/left.vm")
+
+            <div id="right" class="col-xs-12 col-sm-9 content">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="form-group">
+                            <div class="col-md-11">
+                                <h3 class="panel-title"><a href="javascript:void(0);" class="toggle-sidebar"><span class="fa fa-angle-double-left" data-toggle="offcanvas" title="Maximize Panel"></span></a>
+                                    监控端 - 编辑/新增</h3>
+                            </div>
+                            <div class="col-md-1">
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="col-xs-12 col-sm-12">
+                          <form method="post" id="newEditForm" class="form-horizontal" >
+                              <input class="form-control m-b" id="areaid" name="agentId" type="hidden" value="$!{Agent.agentId}">
+            
+                              <div class="form-group">
+                                  <label  class="col-sm-2 control-label">Agent地域:</label>
+                                  <div class="col-md-4">
+                                      <input class="form-control m-b" id="area" name="agentArea" type="text" value="$!{Agent.agentArea}" minlength="2" required>
+                                  </div>
+                              </div>
+            
+                              <div class="form-group">
+                                  <label  class="col-sm-2 control-label">AgentIP:</label>
+                                  <div class="col-md-4">
+                                      <input class="form-control m-b" id="ip" name="agentIp" type="ip" value="$!{Agent.agentIp}" minlength="2" required>
+            
+                                  </div>
+                              </div>
+                          </form>
+                      <div class="modal-footer">
+                          <a href="list.vm" type="button" id="btn_add_close" class="btn btn-white">返回</a>
+                          <button type="submit" id="btn_run_add" onclick="javascript:return btnadd()"  class="btn btn-primary">保存</button>
+                      </div>
+
+    </div>
+
+    <script src="$!{ct}/js/agent/agent.js"></script>
+
+
+</body>
+</html>

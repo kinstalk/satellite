@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("common/head.vm")
+</head>
+<body>
+<!--header-->
+    #parse("common/nav.vm")
+
+<div class="container-fluid">
+    <!--documents-->
+    <div id="content" class="row row-offcanvas row-offcanvas-left">
+        #parse("common/left.vm")
+
+        <div id="right" class="col-xs-12 col-sm-9 content">
+            <div id="pageCanvasInt" class="canvasInt">
+
+
+
+                <div class="panel panel-default">
+                    <div id="pageCanvasInt" class="canvasInt">
+                        <div id="pageCrumbs" class="crumbs">
+
+                        </div>
+
+
+                        <p>
+                            <a href="/group/edit.vm?" class="btn btn-primary" role="button">增加</a>
+                        </p>
+
+                        <div class="panel panel-default">
+                            <table class="table table-hover table-striped table-condensed table-bordered">
+                                <tr>
+
+                                    <th style="width: 60px;">id</th>
+                                    <th style="width: 60px;">组名称</th>
+                                    <th style="width: 60px;">排序Id</th>
+                                    <th style="width: 100px;">操作</th>
+                                </tr>
+                                #foreach(${item} in $!{page.result})
+                                    <tr>
+
+                                        <td>$!{item.id}</td>
+                                        <td>$!{item.name}</td>
+                                        <td>$!{item.orderId}</td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <a href="/group/edit?id=$!{item.id}"
+                                                   class="btn btn-primary btn-xs" role="button">修改</a>
+                                                <a href="javaScript:commonDeleteConfirm('/group/delete?id=$!{item.id}');"
+                                                   class="btn btn-danger btn-xs" role="button">删除</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                #end
+                            </table>
+                        </div>
+
+                        #if($!page.result.size() > 0)
+                            <!-- 分页栏 -->
+                            #showPage($!{page},"/group/list.vm?")
+                        #end
+
+                    </div>
+                </div>
+
+
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

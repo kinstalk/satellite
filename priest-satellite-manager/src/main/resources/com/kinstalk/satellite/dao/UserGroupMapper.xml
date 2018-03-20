@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kinstalk.satellite.dao.UserGroupMapper">
+	
+
+	<resultMap id="userGroupMap" type="com.kinstalk.satellite.domain.UserGroup">
+        <id column="id" property="id"/>
+        
+		<result column="group_id" property="groupId"/>
+    </resultMap>
+
+
+    <resultMap id="adminUserMap" type="com.kinstalk.satellite.domain.AdminUser">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="password" property="password"/>
+    </resultMap>
+
+
+
+
+    <insert id="save" parameterType="com.kinstalk.satellite.domain.UserGroup">
+        <selectKey resultType="Long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert ignore into  <include refid="TABLE"/>
+        (
+        	`user_id`,`group_id`
+        )
+        values
+        (
+        	
+        	#{userId},
+        	#{groupId}
+        )
+    </insert>
+
+    <insert id="saveUser" parameterType="com.kinstalk.satellite.domain.AdminUser">
+
+        insert into <include refid="TABLE_USER"/>
+        (
+        `id`,`name`,`password`
+        )
+        values
+        (
+
+        #{id},
+        #{name},
+        #{password}
+        )
+    </insert>
+
+    <update id="updateUser" parameterType="com.kinstalk.satellite.domain.AdminUser">
+
+        update <include refid="TABLE_USER"/>
+        set
+        `id`=#{id},`name`=#{name},`password`=#{password}
+        where `id`=#{id}
+
+    </update>
+
+    <insert id="update" parameterType="com.kinstalk.satellite.domain.UserGroup">
+        UPDATE <include refid="TABLE"/>
+        <include refid="UPDATE_COLUMN_SET"/>
+        <![CDATA[WHERE id = #{id}]]>
+    </insert>
+
+    <update id="delete" parameterType="com.kinstalk.satellite.domain.UserGroup" >
+        DELETE FROM
+        <include refid="TABLE"/>
+        <include refid="QUERY_WHERE_CLAUSE"/>
+
+    </update>
+
+    <!-- 查询 -->
+    <select id="selectList" parameterType="java.util.Map" resultMap="userGroupMap">
+        SELECT
+            <include refid="QUERY_COLUMN_LIST"/>
+        FROM
+        <include refid="TABLE"/>
+        <include refid="QUERY_WHERE_CLAUSE"/>
+        <include refid="QUERY_ORDER_LIMIT_CONDITION"/>
+    </select>
+
+    <!-- 查询总数 -->
+    <select id="selectListCount" parameterType="java.util.Map" resultType="int">
+        SELECT COUNT(id) AS COUNT FROM
+        <include refid="TABLE"/>
+        <include refid="QUERY_WHERE_CLAUSE"/>
+        <include refid="QUERY_ORDER_LIMIT_CONDITION"/>
+    </select>
+
+    <!-- 查询ById -->
+    <select id="selectById" parameterType="java.lang.Long" resultMap="userGroupMap">
+        SELECT
+        <include refid="QUERY_COLUMN_LIST"/>
+        FROM
+        <include refid="TABLE"/>
+        WHERE id = #{id}
+    </select>
+    <!--查询所有用户-->
+    <select id="selectAdminUser"  resultMap="adminUserMap">
+        SELECT
+        <include refid="QUERY_COLUMN_USER_LIST"/>
+        FROM
+        <include refid="TABLE_USER"/>
+
+    </select>
+
+	<!-- 所有查询列 -->
+	<sql id="QUERY_COLUMN_LIST">
+		<![CDATA[
+		`user_id` AS 'userId',`group_id` AS 'groupId'
+		]]>
+	</sql>
+    <sql id="QUERY_COLUMN_USER_LIST">
+        <![CDATA[
+		`id` AS 'id',`name` AS 'name',`password` AS 'password'
+		]]>
+    </sql>
+	<!-- 表-->
+
+    <sql id="TABLE"><![CDATA[ admin_user_group ]]></sql>
+
+    <sql id="TABLE_USER"><![CDATA[ admin_user ]]></sql>
+	
+	<!-- 全部条件(更多功能可以通过queryData扩展实现)  -->
+	<sql id="QUERY_WHERE_CLAUSE">
+		<where>
+			
+			<if test="userId != null and userId != ''"><![CDATA[AND `user_id` = #{userId}]]></if>
+			<if test="groupId != null and groupId != ''"><![CDATA[AND `group_id` = #{groupId}]]></if>
+		</where>
+	</sql>
+	
+	<!-- 智能排序与分页 -->
+	<sql id="QUERY_ORDER_LIMIT_CONDITION">
+		<if test="orderField != null and orderField != '' and orderFieldType != null and orderFieldType != ''"><![CDATA[ORDER BY ${orderField} ${orderFieldType}]]></if>
+		<if test="startIndex != null and startIndex &gt;= 0 and pageSize != null and pageSize &gt; 0"><![CDATA[LIMIT #{startIndex},#{pageSize}]]></if>
+	</sql>
+
+	<!-- 更新列字段,只要不为NULL则更新,除开主键列 -->
+	<sql id="UPDATE_COLUMN_SET">
+		<set>
+			
+			<if test="groupId != null"><![CDATA[ `group_id` = #{groupId},]]></if>
+		</set>
+	</sql>
+	
+	
+</mapper>

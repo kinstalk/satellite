@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <script>
+
+        var swfu;
+
+
+
+        $(document).ready(function () {
+            // 使用 jQuery异步提交表单
+            var formId = "#scriptForm";
+
+            $("#btn_update").click(function () {
+
+
+
+                var name=$("#name").val();
+                var filepath=$("#path").val();
+                if(name==null||name==''){
+                    alert("请填写名称");
+                    return;
+                }
+                if(filepath==null||filepath==''){
+                    alert("请添加脚本文件");
+                    return;
+                }
+                $.ajax({
+                    url: '/script/save',
+                    data: $("#scriptForm").serialize(),
+                    type: "POST",
+                    success: function () {
+                        $("#btn_add_close").click();
+                        window.location.reload();
+                    }
+                });
+                return false;
+            });
+
+
+
+
+
+            var settings = {
+                flash_url : "/js/plugins/swfupload/swfupload.swf",
+                flash9_url : "/js/plugins/swfupload/swfupload_fp9.swf",
+                upload_url: "/upload/file",
+                post_params: {"111" : "aaa"},
+                file_size_limit : "100 MB",
+                file_types : "*.*",
+                file_types_description : "All Files",
+                file_upload_limit : 100,
+                file_queue_limit : 0,
+                custom_settings : {
+                    progressTarget : "fsUploadProgress",
+                    cancelButtonId : "btnCancel"
+                },
+                debug: false,
+
+                // Button settings
+                button_image_url: "",
+                button_width: "80",
+                button_height: "40",
+                button_placeholder_id: "spanButtonPlaceHolder",
+                button_text: '选择文件',
+                //button_text_style: "",
+                button_text_left_padding: 10,
+                button_text_top_padding: 10,
+
+
+                // The event handler functions are defined in handlers.js
+                swfupload_preload_handler : preLoad,
+                swfupload_load_failed_handler : loadFailed,
+                file_queued_handler : fileQueued,
+                file_queue_error_handler : fileQueueError,
+                file_dialog_complete_handler : fileDialogComplete,
+                upload_start_handler : uploadStart,
+                upload_progress_handler : uploadProgress,
+                upload_error_handler : uploadError,
+                upload_success_handler : uploadSuccess,
+                upload_complete_handler : uploadComplete,
+                queue_complete_handler : queueComplete	// Queue plugin event
+            };
+
+            swfu = new SWFUpload(settings);
+
+            //上传成功后函数
+            function uploadSuccess(file, serverData) {
+
+                if(serverData=='exception'){
+                    alert("上传失败");
+                    return;
+
+                }
+
+                $("#updatepath").attr("value", serverData)
+            }
+            function uploadError(file, serverData) {
+                alert("上传失败");
+            }
+
+        });
+
+
+    </script>
+</head>
+
+<body class="gray-bg">
+    <div class="wrapper wrapper-content" style="overflow:auto;padding:0px;margin:0px;width:'100%';height:300px;">
+
+
+                <div class="ibox-content" >
+                    <form method="get" id="scriptForm" class="form-horizontal" style="width: 500px;align-self: center;">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">脚本名称</label>
+
+                            <div class="col-sm-10" style="width:360px">
+                                <input type="text" id="name" name="name" class="form-control" value="$!{script.name}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label  class="col-sm-2 control-label"> 脚本文件</label>
+                            <div class="col-md-10" style="width:360px">
+                                <input type="text" id="updatepath" autocomplete="off"value="$!{script.path}" name="path" class="form-control input-sm" style="width:250px;float:left;height: 34px;">
+                                <span id="spanButtonPlaceHolder"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label  class="col-sm-2 control-label"> APP类型</label>
+                            <div class="col-md-10" style="width:360px">
+                                <select class="form-control m-b" id="appid" name="appId">
+                                    #if($!{script.appId} == 1)
+                                        <option value='1' selected="selected">WithU</option>
+                                        <option value='2'>奇技</option>
+                                        <option value='3'>亲见</option>
+                                    #elseif($!{script.appId} == 2)
+                                        <option value='1' >WithU</option>
+                                        <option value='2' selected="selected">奇技</option>
+                                        <option value='3'>亲见</option>
+                                    #else
+                                        <option value='1' >WithU</option>
+                                        <option value='2' >奇技</option>
+                                        <option value='3' selected="selected">亲见</option>
+                                    #end
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">备注</label>
+                            <div class="col-sm-10" style="width:360px">
+                                <input type="text" name="remark" value="$!{script.remark}" class="form-control">
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" id="btn_add_close" class="btn btn-white" data-dismiss="modal">关闭</button>
+                    <button type="submit" id="btn_update" class="btn btn-primary">保存</button>
+                </div>
+            </div>
+
+
+</body>
+</html>

@@ -1,0 +1,9 @@
+/* search form */
+.input-group.search-group{
+    width: 220px;
+}
+.navbar-form {
+    border-color: #e7e7e7;
+    margin-bottom: 8px;
+    background-color: #f1f1f1;
+}
